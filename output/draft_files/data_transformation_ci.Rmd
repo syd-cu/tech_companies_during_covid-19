@@ -21,7 +21,6 @@ library(readr)
 CI <- read.csv("data/CI.csv")
 ci <-CI %>%
   select("Date","US.Institutional.Index.Value","US.Individual.Index.Value")%>%
-  rename("Institutional_Index"="US.Institutional.Index.Value",
-         "Individual_Index"="US.Individual.Index.Value")
+  drop_na()
 ```
 
