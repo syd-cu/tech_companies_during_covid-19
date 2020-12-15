@@ -36,9 +36,11 @@ msft = read_html('https://www.macrotrends.net/stocks/charts/MSFT/microsoft/reven
 goog = read_html('https://www.macrotrends.net/stocks/charts/GOOG/alphabet/revenue')
 twtr = read_html('https://www.macrotrends.net/stocks/charts/TWTR/twitter/revenue')
 fb = read_html('https://www.macrotrends.net/stocks/charts/FB/facebook/revenue')
+aapl = read_html('https://www.macrotrends.net/stocks/charts/AAPL/apple/revenue')
+
 companies = list(netflix, disney, amazon, att, roku, overstock, blue_apron, wayfair, etsy, chewy, farfetch, ea, sciplay, ttwo, 
-           atvi, zoom, csco, eght, rng, msft, goog, twtr, fb)
-company_names = c('netflix', 'disney', 'amazon', 'att', 'roku', 'overstock', 'blue_apron', 'wayfair', 'etsy', 'chewy', 'farfetch', 'ea', 'sciplay', 'ttwo', 'atvi', 'zoom', 'csco', 'eght', 'rng', 'msft', 'goog', 'twtr', 'fb')
+           atvi, zoom, csco, eght, rng, msft, goog, twtr, fb, aapl)
+company_names = c('netflix', 'disney', 'amazon', 'att', 'roku', 'overstock', 'blue_apron', 'wayfair', 'etsy', 'chewy', 'farfetch', 'ea', 'sciplay', 'ttwo', 'atvi', 'zoom', 'csco', 'eght', 'rng', 'msft', 'goog', 'twtr', 'fb'，'aapl')
 
 df_list = list()
 for (i in 1:23) {
