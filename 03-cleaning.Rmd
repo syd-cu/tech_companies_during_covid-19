@@ -55,8 +55,8 @@ for (idx in seq(length(stock_list_streaming))){
   temp_df <- select(temp_df, Date, Index, Close)
   streaming_df = rbind(streaming_df, temp_df)
 }
-streaming_df <- streaming_df %>%
-  pivot_wider(names_from = Index, values_from = Close)
+# streaming_df <- streaming_df %>%
+#   pivot_wider(names_from = Index, values_from = Close)
 #write.csv(streaming_df, file='./data/streaming_stock.csv',row.names = FALSE)
 ```
 
@@ -76,8 +76,8 @@ for (idx in seq(length(stock_list_shopping))){
   temp_df <- select(temp_df, Date, Index, Close)
   shopping_df = rbind(shopping_df, temp_df)
 }
-shopping_df<- shopping_df%>%
-  pivot_wider(names_from = Index, values_from = Close)
+# shopping_df<- shopping_df%>%
+#   pivot_wider(names_from = Index, values_from = Close)
 #write.csv(shopping_df, file='./data/shopping_stock.csv',row.names = FALSE)
 ```
 
@@ -98,8 +98,8 @@ for (idx in seq(length(stock_list_entertainment))){
   entertainment_df = rbind(entertainment_df, temp_df)
 }
 
-entertainment_df<- entertainment_df%>%
-  pivot_wider(names_from = Index, values_from = Close)
+# entertainment_df<- entertainment_df%>%
+#   pivot_wider(names_from = Index, values_from = Close)
 #write.csv(entertainment_df, file='./data/entertainment_stock.csv',row.names = FALSE)
 ```
 
@@ -119,8 +119,8 @@ for (idx in seq(length(stock_list_wfl))){
   temp_df <- select(temp_df, Date, Index, Close)
   wfl_df = rbind(wfl_df, temp_df)
 }
-wfl_df<- wfl_df%>%
-   pivot_wider(names_from = Index, values_from = Close)
+# wfl_df<- wfl_df%>%
+#    pivot_wider(names_from = Index, values_from = Close)
 #write.csv(wfl_df, file='./data/wfh_stock.csv',row.names = FALSE)
 ```
 
@@ -139,8 +139,8 @@ for (idx in seq(length(stock_list_other))){
   temp_df <- select(temp_df, Date, Index, Close)
   other_df = rbind(other_df, temp_df)
 }
-other_df<- other_df%>%
- pivot_wider(names_from = Index, values_from = Close)
+# other_df<- other_df%>%
+#  pivot_wider(names_from = Index, values_from = Close)
 #write.csv(other_df, file='./data/other_stock.csv',row.names = FALSE)
 ```
 
@@ -191,11 +191,11 @@ scaled_wfl_df <- scale(wfl_df)
 scaled_other_df <- scale(other_df)
 
 
-write.csv(wfl_df, file='./output/scaled_streaming_stock.csv',row.names = FALSE)
-write.csv(wfl_df, file='./output/scaled_shopping_stock.csv',row.names = FALSE)
-write.csv(wfl_df, file='./output/scaled_entertainment_stock.csv',row.names = FALSE)
-write.csv(wfl_df, file='./output/scaled_wfl_stock.csv',row.names = FALSE)
-write.csv(wfl_df, file='./output/scaled_other_stock.csv',row.names = FALSE)
+write.csv(scaled_streaming_df, file='./output/scaled_streaming_stock.csv',row.names = FALSE)
+write.csv(scaled_shopping_df, file='./output/scaled_shopping_stock.csv',row.names = FALSE)
+write.csv(scaled_entertainment_df, file='./output/scaled_entertainment_stock.csv',row.names = FALSE)
+write.csv(scaled_wfl_df, file='./output/scaled_wfl_stock.csv',row.names = FALSE)
+write.csv(scaled_other_df, file='./output/scaled_other_stock.csv',row.names = FALSE)
 ```
 
 
@@ -217,7 +217,7 @@ ci_standized<-ci_index%>%
   mutate(std_ind_index =  standardize(US.Individual.Index.Value),
          std_inst_index= standardize(US.Institutional.Index.Value))
 
-
+write.csv(ci_standized, file='./output/ci_standized')
 #calulate average for every 3 month CI represent quarterly ci value
 ci_new <-ci_index[2:232, 2:3]
 n <- 3
