@@ -40,10 +40,10 @@ aapl = read_html('https://www.macrotrends.net/stocks/charts/AAPL/apple/revenue')
 
 companies = list(netflix, disney, amazon, att, roku, overstock, blue_apron, wayfair, etsy, chewy, farfetch, ea, sciplay, ttwo, 
            atvi, zoom, csco, eght, rng, msft, goog, twtr, fb, aapl)
-company_names = c('netflix', 'disney', 'amazon', 'att', 'roku', 'overstock', 'blue_apron', 'wayfair', 'etsy', 'chewy', 'farfetch', 'ea', 'sciplay', 'ttwo', 'atvi', 'zoom', 'csco', 'eght', 'rng', 'msft', 'goog', 'twtr', 'fb'，'aapl')
+company_names = c('netflix', 'disney', 'amazon', 'att', 'roku', 'overstock', 'blue_apron', 'wayfair', 'etsy', 'chewy', 'farfetch', 'ea', 'sciplay', 'ttwo', 'atvi', 'zoom', 'csco', 'eght', 'rng', 'msft', 'goog', 'twtr', 'fb', 'aapl')
 
 df_list = list()
-for (i in 1:23) {
+for (i in 1:24) {
   q = companies[[i]] %>% 
   html_nodes(xpath = '//*[@id="style-1"]/div[2]/table') %>% html_table
   
@@ -56,7 +56,7 @@ for (i in 1:23) {
 }
 
 joined = df_list[[1]]
-for (j in 2:23) {
+for (j in 2:24) {
   joined = merge(joined, df_list[[j]], by = 'Date', all.x = TRUE)
 }
 
@@ -89,4 +89,4 @@ CI <- read.csv("./data/CI.csv")
 ```
 
 ## Daily stock price 
-**For each of the companies we choosed, the historical stock price data can be quickly loaded using getSymbols function of quantmod package in R. Using 'yahoo' as the sourcing method, we load past daily stock prices including “Open price”, “High price”, “Low price”, “Close price”, “Volume” and “Adjusted price” from March 1, 2020 to November 1, 2020.**
+**For each of the companies we choosed, the historical stock price data can be quickly loaded using getSymbols function in 'quantmod' package. Using 'yahoo' as the sourcing method, we load the past daily stock prices including “Open price”, “High price”, “Low price”, “Close price”, “Volume” and “Adjusted price” from January 1, 2020 to December 11, 2020.**
