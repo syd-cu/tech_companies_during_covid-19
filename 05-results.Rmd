@@ -15,6 +15,11 @@ To facilitate our analysis, we scaled the stock closing price to make each stock
 #### Streaming service - Companies with mature and diversified online businesses performed strongly, while companies still in transition to online business felt under attack.
 
 ```{r}
+library(tidyverse)
+library(ggplot2)
+library(parcoords)
+library(d3r)
+library(plotly)
 # streaming stock
 streaming_stock <- read.csv('./data/streaming_stock.csv')
 streaming_stock <- streaming_stock %>%
@@ -416,6 +421,7 @@ In the 2nd part, firstly, we created stock line chart that overlays CI bar chart
 Moreover, Parrallel Coordinates plots were created to explore the potential correlations between Quarterly CI and companies' quarterly revenue. 
 ```{r}
 library(tidyverse)
+library(ggplot2)
 library(parcoords)
 library(d3r)
 library(plotly)
@@ -532,8 +538,8 @@ ci_standized_copy <-ci_standized%>%
   filter(Date>="2020-3-1"&Date<="2020-10-1")
 ```
 
-###part 2.1:  confidence index and stock closing price(standardized) 
-####Streaming Services
+### part 2.1:  confidence index and stock closing price(standardized) 
+#### Streaming Services
 ```{r}
 p1<-ggplot(ci_standized_copy,aes(Date, std_ind_index))
 
@@ -553,7 +559,7 @@ ggplotly(f1)
 ```
 As shown in the plot, despite of decreasing confidence index,  stock price of industry-leading streaming-service companies like Netflix and Roku kept an increasing trend, which outperforms investors' expectation of the stock market.  At the same time, the stock performance of emerging streaming-service companies like Disney and AT&T matches the changes of investors' confidence of stock market. 
 
-####E-commerce
+#### E-commerce
 ```{r}
 f2<-p1+ geom_line(aes(Date, Close, color=Index), std_shopping_stock )+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -568,7 +574,7 @@ ggplotly(f2)
 As shown in the plot, the performances of online-shopping companies in the stock market matches investors' expectation. 
 
 
-####Entertainment/Gaming  
+#### Entertainment/Gaming  
 ```{r}
 f3<-p1+ geom_line(aes(Date, Close, color=Index), std_entertainment_stock   )+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -583,7 +589,7 @@ ggplotly(f3)
 Stock price of Entertainment companies had overall increasing tendency which outperforms investors' expectation of stock market. 
 
 
-####Videoconferencing 
+#### Videoconferencing 
 ```{r}
 f4<-p1+ geom_line(aes(Date, Close, color=Index), std_wfh_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -596,26 +602,30 @@ ggplotly(f4)
 ```
 Stock of price of Zoom outperforms investors' expectation since April.  However, the performance of other companies with similar services and certain customer groups in the stock market is about the same as investors' expectation. 
 
-####Tech Giants
-```{r}
+#### Tech Giants
+```{r, include = FALSE}
 f5<-p1+ geom_line(aes(Date, Close, color=Index), std_other_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
   labs(title="Standardized stock closing price & Standardized CI in 2020 (Other category)", color="Company")+
   scale_color_manual(values=c("deeppink", "dodgerblue", "chocolate", "forestgreen", "slategrey"), name="")
   theme_light()+
   theme(plot.title = element_text(hjust = 0.5))
+
+
+
+```
+
+```{r}
 ggplotly(f5)
-
-
 ```
 The stock market's performance of these giant multi-national tech companies had strong increasing trend since April, which is way over investors' expectation potentially due to the uniqueness of services that they provide,and supports from large amount of users.  
 
 
-###Part 2.1 result conclusion:
+### Part 2.1 result conclusion:
 In terms of stock closing price, performances of most of tech companies were over investors' expectation even when investors' stock market confidence was low.  Moreover, for other tech companies which had emerging service line or didn't have unsubstitutable services/products, their overall stock market performance matched the changes of CI. 
 
 
-###Part 2.2: Quarterly confidence Index and Quarterly Revenue 
+### Part 2.2: Quarterly confidence Index and Quarterly Revenue 
 ```{r}
 ci_quarterly <-read.csv("./data/ci_quarterly.csv")
 #Standardize monthly ci_index
@@ -658,7 +668,7 @@ combo_data<- std_rev%>%
   
 ```
 
-####Streaming Services 
+#### Streaming Services 
 ```{r}
 streaming<-combo_data%>%
   select(Date,Std_individual_CI, 5, 1:2, 4)
@@ -680,7 +690,7 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across different streaming companies increased.
 
-####E-Commerce 
+#### E-Commerce 
 ```{r}
 shopping<-combo_data%>%
   select(Date,Std_individual_CI, 3, 6:10)
@@ -704,7 +714,7 @@ Both before and after COVID-19, there is a negative correlation between investor
 Before COVID-19, compared to CI of 2019 1st quarter , 2nd quarter of 2019's CI increased but the revenue is less than that of the 1st quarter.After COVID-19, for example,  although the CI of 2020 3rd quarter decreased compared with that of 2020 2nd quarter, the revenue of companies like Farfetch, Amazon and Etsy increased as well. 
 
 
-####Entertainment/Gaming 
+#### Entertainment/Gaming 
 ```{r}
 entertainment<-combo_data%>%
   select(Date,Std_individual_CI, 11:14)
@@ -725,7 +735,7 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across two gaming companies shown increased.
 
-####Videoconferencing 
+#### Videoconferencing 
 ```{r}
 wfh<-combo_data%>%
   select(Date,Std_individual_CI, 15:16)
@@ -748,7 +758,7 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of WFH companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter for two WFH companies increased.
 
-####Tech Giants
+#### Tech Giants
 ```{r}
 other<-combo_data%>%
   select(Date,Std_individual_CI, 17:21)
@@ -774,7 +784,7 @@ After COVID-19,there is a negative correlation between investors' confidence lev
 
 
 
-###Part 2.2 result conclusion:
+### Part 2.2 result conclusion:
 Except E-Commerce companies, quarterly revenue of all other type of tech companies mentioned above seems to have positive correlation with quarterly CI before COVID-19.  However, a negative correlation between quarterly revenue and quarterly CI was observed after the outbreak of COVID-19.
 
 As for E-Commerce companies,  there seems to be a negative correlation between quarterly revenue and quarterly CI both before and after COVID-19. 

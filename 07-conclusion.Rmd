@@ -3,3 +3,8 @@
 This reports explores several aspects of tech companies performances during COVID-19 period. By looking at the three measurements of the companies, we have found that different sub-industries in technology behave distinctly. We think this is due to the nature of each sub-industries. For example, we think video game industry and online streaming are born to be internet companies and their stock soar during the global pandemic. On the other hand, we believe that emerging sectors such as online shopping and work-from-home that are still within the painful transition from traditional industry. Currently, these sectors show a winner-take-all pattern as all companies provide interchangeable services.
 
 All in all, by looking at the integrated companies and the general trends, we consider that in general tech companies out-performed the whole market despite the global recession. 
+
+```{r}
+library(ggplot2)
+library(plotly)
+```
