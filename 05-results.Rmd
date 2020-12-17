@@ -627,7 +627,7 @@ The stock market's performance of these giant multi-national tech companies had 
 In terms of stock closing price, performances of most of tech companies were over investors' expectation even when investors' stock market confidence was low.  Moreover, for other tech companies which had emerging service line or didn't have unsubstitutable services/products, their overall stock market performance matched the changes of CI. 
 
 
-### Quarterly confidence Index and Quarterly Revenue 
+### Quarterly Confidence Index and Quarterly Revenue 
 ```{r}
 ci_quarterly <-read.csv("./data/ci_quarterly.csv")
 #Standardize monthly ci_index
@@ -670,7 +670,8 @@ combo_data<- std_rev%>%
   
 ```
 
-#### Streaming Services {-#my-section}
+#### Streaming Services:  {-#my-section}
+**Parallel Coordinates for Quarterly Confidence Index and Companies' Revenue**
 ```{r}
 combo_data['X'] = NULL
 streaming<-combo_data%>%
@@ -693,7 +694,8 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 second quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across different streaming companies increased.
 
-#### E-Commerce {-#my-section}
+#### E-Commerce: {-#my-section}
+**Parallel Coordinates for Quarterly Confidence Index and Companies' Revenue**  
 ```{r}
 shopping<-combo_data%>%
   select(Date,Std_individual_CI, 3, 6:10)
@@ -719,6 +721,8 @@ Before COVID-19, compared to CI of 2019 1st quarter , second quarter of 2019's C
 
 
 #### Entertainment/Gaming {-#my-section}
+**Parallel Coordinates for Quarterly Confidence Index and Companies' Revenue**  
+
 ```{r}
 entertainment<-combo_data%>%
   select(Date,Std_individual_CI, 11:14) %>%
@@ -747,6 +751,8 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 second quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across two gaming companies shown increased.
 
 #### Video-conferencing {-#my-section}
+**Parallel Coordinates for Quarterly Confidence Index and Companies' Revenue**  
+
 ```{r}
 wfh<-combo_data%>%
   select(Date,Std_individual_CI, 15:16)
@@ -775,6 +781,7 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of WFH companies.  For instance, compared to 2020 second quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter for two WFH companies increased.
 
 #### Tech Giants {-#my-section}
+**Parallel Coordinates for Quarterly Confidence Index and Companies' Revenue**  
 ```{r}
 other<-combo_data%>%
   select(Date,Std_individual_CI, 17:21)
