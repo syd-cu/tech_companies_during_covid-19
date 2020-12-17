@@ -1,4 +1,6 @@
 # Missing values
 LogMeIn (LOGM)'s stock price contains missing values. The closing prices from September 1, 2020 to October 31, 2020 are missing. They are a contiguous piece of time series. We plan to keep them for now.
-\n  Zoom, Cisco Systems, and 8*8 has different definition of quarter from other companies, thus we will not discuss their quarterly revenue in this project. 
+
+\n Zoom, Cisco Systems, and 8 $\times$ 8 has different definition of quarter from other companies, thus we will not discuss their quarterly revenue in this project. 
+
 \n There are no missing values involved in other parts. 
