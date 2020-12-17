@@ -547,7 +547,7 @@ p1<-ggplot(ci_standized_copy,aes(Date, std_ind_index))
 
 p1<-p1+ geom_bar(stat="identity",alpha=0.75)+
   labs(y="standardized confidence index")+
-  geom_text(aes(label=round(std_ind_index,1)),coulor="black", fontface = "bold")
+  geom_text(aes(label=round(std_ind_index,1)),color="black", fontface = "bold")
 
 f1<-p1+ geom_line(aes(Date, Close, color=Index), std_streaming_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -718,7 +718,8 @@ Before COVID-19, compared to CI of 2019 1st quarter , 2nd quarter of 2019's CI i
 #### Entertainment/Gaming {-#my-section}
 ```{r}
 entertainment<-combo_data%>%
-  select(Date,Std_individual_CI, 11:14)
+  select(Date,Std_individual_CI, 11:14) %>%
+  replace_na(list(sciplay = -0.5040004))
 entertainment_p<-parcoords::parcoords(entertainment,
               rownames=FALSE,
               height = 450,
@@ -733,6 +734,7 @@ entertainment_p<-parcoords::parcoords(entertainment,
 )
 
 ```
+
 ```{r}
 entertainment_p
 
@@ -757,9 +759,10 @@ wfh_p<-parcoords::parcoords(wfh,
               brushMode = "1D-axes",
               alphaOnBrushed = 0.2
 )
-wfh_p
+
 
 ```
+
 ```{r}
 wfh_p
 
@@ -784,11 +787,13 @@ other_p<-parcoords::parcoords(other,
               brushMode = "1D-axes",
               alphaOnBrushed = 0.2
 )
-other_p
+
 
 
 ```
+
 ```{r}
+
 other_p
 
 ```
