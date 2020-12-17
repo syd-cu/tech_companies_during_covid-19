@@ -6,3 +6,4 @@ This reports explores several aspects of tech companies performances during COVI
 
 \n All in all, by looking at the integrated companies and the general market trends provided by the Confidence Index, we consider that in general tech companies out-performed the whole market during COVID-19 despite the global recession. 
 
+\n In the future, we would like to keep tracking how technology companies behave in long run after the pandemic crash. Due to the limited data we collected, the trends we described in this project may be biased. If we have more data available in long term, we may be able to give a more decisive conclusion. 
