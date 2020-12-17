@@ -40,11 +40,7 @@ stock_list_entertainment <- c("EA", "NTDOY", "SCPL", "TTWO", "ATVI")
 stock_list_wfl <- c("ZM","CSCO", "EGHT", "RNG", "LOGM")
 stock_list_other <- c("MSFT", "GOOGL", "TWTR", "FB", "AAPL")
 
-#stock_list_streaming <- c("NFLX", "DIS", "T", "ROKU")
-#stock_list_shopping <- c("AMZN", "OSTK", "APRN", "W", "ETSY", "CHWY", "FTCH")
-#stock_list_entertainment <- c("EA", "NTDOY", "SCPL", "TTWO", "ATVI")
-#stock_list_wfl <- c("ZM", "CSCO", "EGHT", "RNG", "LOGM")
-#stock_list_other <- c("MSFT", "GOOGL", "TWTR", "FB")
+
 ```
 
 
@@ -54,7 +50,7 @@ streaming_stock <- NULL
 for (idx in seq(length(stock_list_streaming))){
   stock_index = stock_list_streaming[idx]
   getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11")
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
   temp_df = as.data.frame(get(stock_index))
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
@@ -65,23 +61,6 @@ for (idx in seq(length(stock_list_streaming))){
   streaming_stock = rbind(streaming_stock, temp_df)
 }
 
-#streaming_df <- NULL
-#for (idx in seq(length(stock_list_streaming))){
-#  stock_index = stock_list_streaming[idx]
-#  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-#             from = '2020-03-01', to = "2020-11-01",)
-#  temp_df = as.data.frame(get(stock_index))
-#  temp_df$Date = row.names(temp_df)
-#  temp_df$Index = stock_index
-#  row.names(temp_df) = NULL
-#  colnames(temp_df) = c("Open", "High", "Low", "Close", 
-#                        "Volume", "Adjusted", "Date", "Index")
-#  temp_df <- select(temp_df, Date, Index, Close)
-#  streaming_df = rbind(streaming_df, temp_df)
-#}
-#streaming_df <- streaming_df %>%
-#  pivot_wider(names_from = Index, values_from = Close)
-#write.csv(streaming_df, file='./data/streaming_stock.csv',row.names = FALSE)
 ```
 
 ```{r, include=FALSE}
@@ -90,7 +69,7 @@ shopping_stock <- NULL
 for (idx in seq(length(stock_list_shopping))){
   stock_index = stock_list_shopping[idx]
   getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11")
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
   temp_df = as.data.frame(get(stock_index))
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
@@ -101,23 +80,6 @@ for (idx in seq(length(stock_list_shopping))){
   shopping_stock = rbind(shopping_stock, temp_df)
 }
 
-#shopping_df <- NULL
-#for (idx in seq(length(stock_list_shopping))){
-#  stock_index = stock_list_shopping[idx]
-#  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-#             from = '2020-03-01', to = "2020-11-01",)
-#  temp_df = as.data.frame(get(stock_index))
-#  temp_df$Date = row.names(temp_df)
-#  temp_df$Index = stock_index
-#  row.names(temp_df) = NULL
-#  colnames(temp_df) = c("Open", "High", "Low", "Close", 
-#                        "Volume", "Adjusted", "Date", "Index")
-# temp_df <- select(temp_df, Date, Index, Close)
-# shopping_df = rbind(shopping_df, temp_df)
-#}
-#shopping_df<- shopping_df%>%
-#  pivot_wider(names_from = Index, values_from = Close)
-#write.csv(shopping_df, file='./data/shopping_stock.csv',row.names = FALSE)
 ```
 
 ```{r, include=FALSE}
@@ -126,7 +88,7 @@ entertainment_stock <- NULL
 for (idx in seq(length(stock_list_entertainment))){
   stock_index = stock_list_entertainment[idx]
   getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11")
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
   temp_df = as.data.frame(get(stock_index))
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
@@ -137,24 +99,7 @@ for (idx in seq(length(stock_list_entertainment))){
   entertainment_stock = rbind(entertainment_stock, temp_df)
 }
 
-#entertainment_df <- NULL
-#for (idx in seq(length(stock_list_entertainment))){
-#  stock_index = stock_list_entertainment[idx]
-#  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-#             from = '2020-03-01', to = "2020-11-01",)
-#  temp_df = as.data.frame(get(stock_index))
-#  temp_df$Date = row.names(temp_df)
-#  temp_df$Index = stock_index
-# row.names(temp_df) = NULL
-# colnames(temp_df) = c("Open", "High", "Low", "Close", 
-#                       "Volume", "Adjusted", "Date", "Index")
-# temp_df <- select(temp_df, Date, Index, Close)
-# entertainment_df = rbind(entertainment_df, temp_df)
-#}
-#
-#entertainment_df<- entertainment_df%>%
-# pivot_wider(names_from = Index, values_from = Close)
-#write.csv(entertainment_df, file='./data/entertainment_stock.csv',row.names = FALSE)
+
 ```
 
 ```{r, include=FALSE}
@@ -163,7 +108,7 @@ wfl_stock <- NULL
 for (idx in seq(length(stock_list_wfl))){
   stock_index = stock_list_wfl[idx]
   getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11")
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
   temp_df = as.data.frame(get(stock_index))
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
@@ -174,23 +119,7 @@ for (idx in seq(length(stock_list_wfl))){
   wfl_stock = rbind(wfl_stock, temp_df)
 }
 
-#wfl_df <- NULL
-#for (idx in seq(length(stock_list_wfl))){
-#  stock_index = stock_list_wfl[idx]
-#  getSymbols(stock_index, verbose = TRUE,
-#             from = '2020-03-01', to = "2020-11-01",)
-#  temp_df = as.data.frame(get(stock_index))
-#  temp_df$Date = row.names(temp_df)
-#  temp_df$Index = stock_index
-#  row.names(temp_df) = NULL
-#  colnames(temp_df) = c("Open", "High", "Low", "Close", 
-#                        "Volume", "Adjusted", "Date", "Index")
-#  temp_df <- select(temp_df, Date, Index, Close)
-#  wfl_df = rbind(wfl_df, temp_df)
-#}
-#wfl_df<- wfl_df%>%
-#   pivot_wider(names_from = Index, values_from = Close)
-#write.csv(wfl_df, file='./data/wfh_stock.csv',row.names = FALSE)
+
 ```
 
 ```{r, include=FALSE}
@@ -199,7 +128,7 @@ other_stock <- NULL
 for (idx in seq(length(stock_list_other))){
   stock_index = stock_list_other[idx]
   getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11")
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
   temp_df = as.data.frame(get(stock_index))
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
@@ -210,55 +139,8 @@ for (idx in seq(length(stock_list_other))){
   other_stock = rbind(other_stock, temp_df)
 }
 
-#other_df <- NULL
-#for (idx in seq(length(stock_list_other))){
-#  stock_index = stock_list_other[idx]
-#  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-#             from = '2020-03-01', to = "2020-11-01",)
-#  temp_df = as.data.frame(get(stock_index))
-#  temp_df$Date = row.names(temp_df)
-#  temp_df$Index = stock_index
-#  row.names(temp_df) = NULL
-#  colnames(temp_df) = c("Open", "High", "Low", "Close", 
-#                        "Volume", "Adjusted", "Date", "Index")
-#  temp_df <- select(temp_df, Date, Index, Close)
-#  other_df = rbind(other_df, temp_df)
-#}
-#other_df<- other_df%>%
-# pivot_wider(names_from = Index, values_from = Close)
-#write.csv(other_df, file='./data/other_stock.csv',row.names = FALSE)
+
 ```
-
-
-```{r}
-#standardize <-function(x)(x-mean(x,na.rm=TRUE))/sd(x, na.rm =TRUE)
-#
-#std_streaming_stock <-streaming_df %>%
-#  select_if(is.numeric)%>%
-#  map_df(~standardize(.x))%>%
-#  add_column(Date=streaming_df$Date)
-#
-#std_shopping_stock <-shopping_df %>%
-#  select_if(is.numeric)%>%
-#  map_df(~standardize(.x))%>%
-#  add_column(Date=shopping_df$Date)
-#
-#std_entertainment_stock <-entertainment_df %>%
-#  select_if(is.numeric)%>%
-#  map_df(~standardize(.x))%>%
-#  add_column(Date=entertainment_df$Date)
-#
-#std_wfh_stock <-wfl_df %>%
-#  select_if(is.numeric)%>%
-#  map_df(~standardize(.x))%>%
-#  add_column(Date=wfl_df$Date)
-#
-#std_other_stock <-other_df %>%
-#  select_if(is.numeric)%>%
-#  map_df(~standardize(.x))%>%
-#  add_column(Date=other_df$Date)
-```
-
 
 
 
@@ -282,24 +164,8 @@ write.csv(entertainment_stock, file = "./data/entertainment_stock.csv", row.name
 write.csv(wfl_stock, file = "./data/wfl_stock.csv", row.names = FALSE)
 write.csv(other_stock, file = "./data/other_stock.csv", row.names = FALSE)
 
-#scale <- function(tidydf){
-#  tidydf <- tidydf %>% group_by(Index) %>%
-#    mutate(Close_scale = round(100*Close/Close[1], 2)) %>%
-#    ungroup()
-#}
-
-#scaled_streaming_df <- scale(streaming_df)
-#scaled_shopping_df <- scale(shopping_df)
-#scaled_entertainment_df <- scale(entertainment_df)
-#scaled_wfl_df <- scale(wfl_df)
-#scaled_other_df <- scale(other_df)
 
 
-#write.csv(wfl_df, file='./output/scaled_streaming_stock.csv',row.names = FALSE)
-#write.csv(wfl_df, file='./output/scaled_shopping_stock.csv',row.names = FALSE)
-#write.csv(wfl_df, file='./output/scaled_entertainment_stock.csv',row.names = FALSE)
-#write.csv(wfl_df, file='./output/scaled_wfl_stock.csv',row.names = FALSE)
-#write.csv(wfl_df, file='./output/scaled_other_stock.csv',row.names = FALSE)
 ```
 
 
