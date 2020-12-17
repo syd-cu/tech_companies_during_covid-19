@@ -4,6 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 # Results
+
 ## Question 1: How did tech companies behave in stock market under the Covid-19 pandemic? 
 
 In this part, we created line charts of stock price, quarterly revenue and quarterly revenue's year-on-year growth for companies from different technology industries. Within each industry, using daily stock closing price as the main merit, together with the quarterly revenue and business models for different companies, we compared and analyzed companies performance under the Covid-19 pandemic and identified a performace pattern for each industry. 
@@ -12,7 +13,7 @@ To begin with, note that every stock price line chart below shows that there is 
 
 To facilitate our analysis, we scaled the stock closing price to make each stock's closing price start at 100 on January 2.
 
-#### Streaming service - Companies with mature and diversified online businesses performed strongly, while companies still in transition to online business felt under attack.
+### Streaming service - Companies with mature and diversified online businesses performed strongly, while companies still in transition to online business felt under attack.
 
 ```{r}
 library(tidyverse)
@@ -101,7 +102,7 @@ Roku shows an more explosive growth in stock price in the past 6 months. While b
 Things become different for Disney and AT&T, whose businesses are not limited to streaming service. AT&T mainly provids wireless, wireline, and pay TV services. After AT&T bought Time Warner two years ago, it began to plan its new streaming media ecosystem. However, its wireless business struggled in the first half of the year as the Covid-19 crisis shut down retailers, and the WarnerMedia group faced closed theaters and postponed movies. Similarly, apart from streaming service, a large part of Disney's revenue comes from its parks and resorts. Because of the theme park closures and the slowdown in the tourism sector during the pandemic, COVID-19 had brought a continuous loss in Disney's quarterly revenues from 2019 Q4 to 2020 Q2. But there were a few bright spots. The newly launched Disney Plus, its Netflix challenger, attracted millions of subscribers since launching and made its stock and revenue get a lift in the past few months.
 
 
-#### Entertainment (Gaming) - Gaming companies took the opportunity and got rich together.
+### Entertainment (Gaming) - Gaming companies took the opportunity and got rich together.
 
 ```{r}
 # Gaming stock
@@ -181,7 +182,7 @@ This is accordant with people's favor and engagement in video gaming during the 
 But when people begin returning to school and work schedules, will video games maintain their share of entertainment time? Since August, the stock price of most companies displays a slower pace of growth and enter a shock period. Together with their revenue drop in 2020 Q3, it seems that, from game studios and publishers to console makers, they are still seeking a way to convert more casual gamers into long-term customers.
 
 
-#### Ecommerce - They were all benefited from the same pandemic but different profit sources.
+### Ecommerce - They were all benefited from the same pandemic but different profit sources.
 
 ```{r}
 # online shopping stock
@@ -259,7 +260,7 @@ Ecommerce companies' stock prices have been steadily increasing for almost the w
 While the steady performance of Amazon is not surprising under the accelerated growth of Amazon's Prime membership base and Amazon's accelerated adoption of cloud services, the other relatively small companies also found their ways of earning money. Etsy has directly benefited from the sale of masks to prevent the spread of COVID-19. And more surprisingly, Overstock stock has been on fire this year. As shown in the revnue plot, the pandemic has generated a business boom for Overstock and has improved its revenue. The pandemic is driving households to spend more on home furnishing items. Also, home furnishing purchases have shifted more to online purchases, which bodes well for Overstock, whose focus is the online home furnishing sales. In addition, Overstock has much cheaper stock price, which is particularly attractive for a number of small investors.
 
 
-#### Videoconferencing - Burgeoning industry fueled by pandemic, Zoom is the big winner.
+### Videoconferencing - Burgeoning industry fueled by pandemic, Zoom is the big winner.
 
 ```{r}
 # wfh stock
@@ -333,7 +334,7 @@ Cloud services are in higher demand than ever. Videoconferencing and remote coll
 But recently since September, there has been some news like physical economy is likely to open up further through 2021, with many developed countries likely to have access to a highly effective Covid-19 vaccine starting from the next spring. This has put the brakes on Zoom’s growth and made it enter to a shock period. However, it will take some time for people to get vaccinated. Moreover, as companies look to cut costs, and give employees more flexibility, the trend of working from home appears to be here to stay even after the pandemic ends in the future. This should ensure that demand for videoconferencing product and the stock price holds up for now. 
 
 
-#### Tech Giants - Traditional giants put up a solid performance and they are untouchable.
+### Tech Giants - Traditional giants put up a solid performance and they are untouchable.
 
 ```{r}
 # Tech giants stock
@@ -409,13 +410,13 @@ And this steady and sustainable performance of tech giants is justifiable, given
 While other companies saw revenue collapse as populations were ordered to stay at home, the tech giants enjoyed a rush of demand. When locked at home, people go shopping on Amazon, play with their iPhone's, google stuff, contact friends on Facebook and Twitter, stream movies on Netflix or hold meetings with colleagues on Microsoft Teams.The strong performance of tech giants stock is a epitome of the strong momentum of the whole tech industry for the past year.
 
 
-#### Summary
+### Summary
 
 To sum up, tech companies with mature online business have gained traction over the past few months as the coronavirus pandemic locked most people indoors, but different companies from different industries have different survival mechanisms specifically. Looking to the future, when people begin returning to school and work schedules after the pandemic, will those companies dramatically fueled by Covid-19 maintain their price values and shape up their truely sustainable business models?
 
 
 
-##Question 2: How do tech companies perform with respect to other measurements? 
+## Question 2: How do tech companies perform with respect to other measurements? 
 In the 2nd part, firstly, we created stock line chart that overlays CI bar chart across different tech services provider to explore the potential correlation between investors' stock CI and stock closing price. 
 
 Moreover, Parrallel Coordinates plots were created to explore the potential correlations between Quarterly CI and companies' quarterly revenue. 
@@ -538,8 +539,8 @@ ci_standized_copy <-ci_standized%>%
   filter(Date>="2020-3-1"&Date<="2020-10-1")
 ```
 
-### part 2.1:  confidence index and stock closing price(standardized) 
-#### Streaming Services
+### Confidence index and stock closing price(standardized) 
+#### Streaming Services {-#my-section}
 ```{r}
 p1<-ggplot(ci_standized_copy,aes(Date, std_ind_index))
 
@@ -559,7 +560,7 @@ ggplotly(f1)
 ```
 As shown in the plot, despite of decreasing confidence index,  stock price of industry-leading streaming-service companies like Netflix and Roku kept an increasing trend, which outperforms investors' expectation of the stock market.  At the same time, the stock performance of emerging streaming-service companies like Disney and AT&T matches the changes of investors' confidence of stock market. 
 
-#### E-commerce
+#### E-commerce {-#my-section}
 ```{r}
 f2<-p1+ geom_line(aes(Date, Close, color=Index), std_shopping_stock )+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -574,7 +575,7 @@ ggplotly(f2)
 As shown in the plot, the performances of online-shopping companies in the stock market matches investors' expectation. 
 
 
-#### Entertainment/Gaming  
+#### Entertainment/Gaming {-#my-section}
 ```{r}
 f3<-p1+ geom_line(aes(Date, Close, color=Index), std_entertainment_stock   )+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -589,7 +590,7 @@ ggplotly(f3)
 Stock price of Entertainment companies had overall increasing tendency which outperforms investors' expectation of stock market. 
 
 
-#### Videoconferencing 
+#### Videoconferencing {-#my-section}
 ```{r}
 f4<-p1+ geom_line(aes(Date, Close, color=Index), std_wfh_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -602,7 +603,7 @@ ggplotly(f4)
 ```
 Stock of price of Zoom outperforms investors' expectation since April.  However, the performance of other companies with similar services and certain customer groups in the stock market is about the same as investors' expectation. 
 
-#### Tech Giants
+#### Tech Giants {-#my-section}
 ```{r, include = FALSE}
 f5<-p1+ geom_line(aes(Date, Close, color=Index), std_other_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
@@ -621,11 +622,11 @@ ggplotly(f5)
 The stock market's performance of these giant multi-national tech companies had strong increasing trend since April, which is way over investors' expectation potentially due to the uniqueness of services that they provide,and supports from large amount of users.  
 
 
-### Part 2.1 result conclusion:
+### Result conclusion:
 In terms of stock closing price, performances of most of tech companies were over investors' expectation even when investors' stock market confidence was low.  Moreover, for other tech companies which had emerging service line or didn't have unsubstitutable services/products, their overall stock market performance matched the changes of CI. 
 
 
-### Part 2.2: Quarterly confidence Index and Quarterly Revenue 
+### Quarterly confidence Index and Quarterly Revenue 
 ```{r}
 ci_quarterly <-read.csv("./data/ci_quarterly.csv")
 #Standardize monthly ci_index
@@ -668,7 +669,7 @@ combo_data<- std_rev%>%
   
 ```
 
-#### Streaming Services 
+#### Streaming Services {-#my-section}
 ```{r}
 streaming<-combo_data%>%
   select(Date,Std_individual_CI, 5, 1:2, 4)
@@ -690,7 +691,7 @@ Before COVID-19, there is a positive correlation between investors' confidence l
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across different streaming companies increased.
 
-#### E-Commerce 
+#### E-Commerce {-#my-section}
 ```{r}
 shopping<-combo_data%>%
   select(Date,Std_individual_CI, 3, 6:10)
@@ -714,7 +715,7 @@ Both before and after COVID-19, there is a negative correlation between investor
 Before COVID-19, compared to CI of 2019 1st quarter , 2nd quarter of 2019's CI increased but the revenue is less than that of the 1st quarter.After COVID-19, for example,  although the CI of 2020 3rd quarter decreased compared with that of 2020 2nd quarter, the revenue of companies like Farfetch, Amazon and Etsy increased as well. 
 
 
-#### Entertainment/Gaming 
+#### Entertainment/Gaming {-#my-section}
 ```{r}
 entertainment<-combo_data%>%
   select(Date,Std_individual_CI, 11:14)
@@ -728,14 +729,19 @@ entertainment_p<-parcoords::parcoords(entertainment,
                 colorScheme = "schemeCategory10"),
               withD3 = TRUE,
               brushMode = "1D-axes",
-              alphaOnBrushed = 0.2)
+              alphaOnBrushed = 0.2
+)
+
+```
+```{r}
 entertainment_p
+
 ```
 Before COVID-19, there is a positive correlation between investors' confidence level and revenue of streaming companies.  Compared to 4th quarter of 2018, 2nd quarter of 2019's CI increased, and the revenue of two gaming companies increased as well.
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across two gaming companies shown increased.
 
-#### Videoconferencing 
+#### Videoconferencing {-#my-section}
 ```{r}
 wfh<-combo_data%>%
   select(Date,Std_individual_CI, 15:16)
@@ -754,11 +760,15 @@ wfh_p<-parcoords::parcoords(wfh,
 wfh_p
 
 ```
+```{r}
+wfh_p
+
+```
 Before COVID-19, there is a positive correlation between investors' confidence level and revenue of WFH companies. For example,  Compared to 1st quarter of 2019, 2nd quarter of 2019's CI increased, and the revenue increased as well.
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of WFH companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter for two WFH companies increased.
 
-#### Tech Giants
+#### Tech Giants {-#my-section}
 ```{r}
 other<-combo_data%>%
   select(Date,Std_individual_CI, 17:21)
@@ -778,13 +788,17 @@ other_p
 
 
 ```
+```{r}
+other_p
+
+```
 Before COVID-19, there is a positive correlation between investors' confidence level and revenue of streaming companies.  From 2018 4th Q to 2019 1st Q confidence index increased but revenue of companies increased as well. 
 
 After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, from 2020 2nd Q to 2020 3rd Q, confidence index increased but the revenue dropped dramatically across all companies on the plot.
 
 
 
-### Part 2.2 result conclusion:
+### Result conclusion:
 Except E-Commerce companies, quarterly revenue of all other type of tech companies mentioned above seems to have positive correlation with quarterly CI before COVID-19.  However, a negative correlation between quarterly revenue and quarterly CI was observed after the outbreak of COVID-19.
 
 As for E-Commerce companies,  there seems to be a negative correlation between quarterly revenue and quarterly CI both before and after COVID-19. 

@@ -15,7 +15,6 @@ quarterly
 ```
 
 
-#### Standardize quarterly revenue
 ```{r}
 standardize <-function(x)(x-mean(x,na.rm=TRUE))/sd(x, na.rm =TRUE)
 std_rev <-quarterly %>%
@@ -31,8 +30,8 @@ std_rev <-quarterly %>%
 For each stock, in 'getSymbols' function, we defined parameters like stock symbol, start date and end date (in our case is January 1, 2020 to December 11, 2020).
 \n The stock data will be automatically loaded as an ‘xts’ (Extensible Time Series) object and assigned to a dataset using the stock symbol as the name. To convert the data to dataframe structure, we used 'as.data.frame(get(stock_index))' to change the structure. Then, we added `Date` column and `Stock Index` column and filtered the data to only keep the closing price.
 \n With a for-loop, we downloaded the closing price of each stock one by one and appended them together in one dataframe. 
+To scale the data, each closing price value is divided by the value of first date (January 2, 2020) for that stock and multiplied by 100.
 
-#### Stock symbols
 
 ```{r}
 stock_list_streaming <- c("NFLX", "DIS", "T", "ROKU")
@@ -48,9 +47,8 @@ stock_list_other <- c("MSFT", "GOOGL", "TWTR", "FB", "AAPL")
 #stock_list_other <- c("MSFT", "GOOGL", "TWTR", "FB")
 ```
 
-#### Download and import data
 
-```{r}
+```{r, include = FALSE}
 #Streaming companies
 streaming_stock <- NULL
 for (idx in seq(length(stock_list_streaming))){
@@ -86,7 +84,7 @@ for (idx in seq(length(stock_list_streaming))){
 #write.csv(streaming_df, file='./data/streaming_stock.csv',row.names = FALSE)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Online shopping companies
 shopping_stock <- NULL
 for (idx in seq(length(stock_list_shopping))){
@@ -122,7 +120,7 @@ for (idx in seq(length(stock_list_shopping))){
 #write.csv(shopping_df, file='./data/shopping_stock.csv',row.names = FALSE)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Entertainment companies
 entertainment_stock <- NULL
 for (idx in seq(length(stock_list_entertainment))){
@@ -159,7 +157,7 @@ for (idx in seq(length(stock_list_entertainment))){
 #write.csv(entertainment_df, file='./data/entertainment_stock.csv',row.names = FALSE)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Communication tech companies (virtual meeting)
 wfl_stock <- NULL
 for (idx in seq(length(stock_list_wfl))){
@@ -195,7 +193,7 @@ for (idx in seq(length(stock_list_wfl))){
 #write.csv(wfl_df, file='./data/wfh_stock.csv',row.names = FALSE)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Tech Giants (Integrated companies)
 other_stock <- NULL
 for (idx in seq(length(stock_list_other))){
@@ -262,8 +260,8 @@ for (idx in seq(length(stock_list_other))){
 ```
 
 
-#### Scale stock closing price
-To scale the data, each closing price value is divided by the value of first date (January 2, 2020) for that stock and multiplied by 100.
+
+
 ```{r}
 scale <- function(tidydf){
   tidydf <- tidydf %>% group_by(Index) %>%

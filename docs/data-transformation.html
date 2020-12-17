@@ -108,10 +108,19 @@
 <ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#question-1-how-did-tech-companies-behave-in-stock-market-under-the-covid-19-pandemic"><i class="fa fa-check"></i><b>5.1</b> Question 1: How did tech companies behave in stock market under the Covid-19 pandemic?</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#part-2.1-confidence-index-and-stock-closing-pricestandardized"><i class="fa fa-check"></i><b>5.1.1</b> part 2.1: confidence index and stock closing price(standardized)</a></li>
-<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#part-2.1-result-conclusion"><i class="fa fa-check"></i><b>5.1.2</b> Part 2.1 result conclusion:</a></li>
-<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#part-2.2-quarterly-confidence-index-and-quarterly-revenue"><i class="fa fa-check"></i><b>5.1.3</b> Part 2.2: Quarterly confidence Index and Quarterly Revenue</a></li>
-<li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#part-2.2-result-conclusion"><i class="fa fa-check"></i><b>5.1.4</b> Part 2.2 result conclusion:</a></li>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#streaming-service---companies-with-mature-and-diversified-online-businesses-performed-strongly-while-companies-still-in-transition-to-online-business-felt-under-attack."><i class="fa fa-check"></i><b>5.1.1</b> Streaming service - Companies with mature and diversified online businesses performed strongly, while companies still in transition to online business felt under attack.</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#entertainment-gaming---gaming-companies-took-the-opportunity-and-got-rich-together."><i class="fa fa-check"></i><b>5.1.2</b> Entertainment (Gaming) - Gaming companies took the opportunity and got rich together.</a></li>
+<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#ecommerce---they-were-all-benefited-from-the-same-pandemic-but-different-profit-sources."><i class="fa fa-check"></i><b>5.1.3</b> Ecommerce - They were all benefited from the same pandemic but different profit sources.</a></li>
+<li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#videoconferencing---burgeoning-industry-fueled-by-pandemic-zoom-is-the-big-winner."><i class="fa fa-check"></i><b>5.1.4</b> Videoconferencing - Burgeoning industry fueled by pandemic, Zoom is the big winner.</a></li>
+<li class="chapter" data-level="5.1.5" data-path="results.html"><a href="results.html#tech-giants---traditional-giants-put-up-a-solid-performance-and-they-are-untouchable."><i class="fa fa-check"></i><b>5.1.5</b> Tech Giants - Traditional giants put up a solid performance and they are untouchable.</a></li>
+<li class="chapter" data-level="5.1.6" data-path="results.html"><a href="results.html#summary"><i class="fa fa-check"></i><b>5.1.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#question-2-how-do-tech-companies-perform-with-respect-to-other-measurements"><i class="fa fa-check"></i><b>5.2</b> Question 2: How do tech companies perform with respect to other measurements?</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#confidence-index-and-stock-closing-pricestandardized"><i class="fa fa-check"></i><b>5.2.1</b> Confidence index and stock closing price(standardized)</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#result-conclusion"><i class="fa fa-check"></i><b>5.2.2</b> Result conclusion:</a></li>
+<li class="chapter" data-level="5.2.3" data-path="results.html"><a href="results.html#quarterly-confidence-index-and-quarterly-revenue"><i class="fa fa-check"></i><b>5.2.3</b> Quarterly confidence Index and Quarterly Revenue</a></li>
+<li class="chapter" data-level="5.2.4" data-path="results.html"><a href="results.html#result-conclusion-1"><i class="fa fa-check"></i><b>5.2.4</b> Result conclusion:</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a>
@@ -162,103 +171,13 @@
 ## 6      331 1387     118  761 1788  121 268 35021 41159  808 17737 58313
 ## 7      365 1459     166  831 1932  122 278 38033 38297  683 18687 59685
 ## 8     1134 1151     151  841 1954  129 304 37154 46173  936 21470 64698</code></pre>
-<div id="standardize-quarterly-revenue" class="section level4" number="3.1.0.1">
-<h4><span class="header-section-number">3.1.0.1</span> Standardize quarterly revenue</h4>
-</div>
 </div>
 <div id="daily-stock-price-1" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Daily Stock Price</h2>
 <p>For each stock, in ‘getSymbols’ function, we defined parameters like stock symbol, start date and end date (in our case is January 1, 2020 to December 11, 2020).
 The stock data will be automatically loaded as an ‘xts’ (Extensible Time Series) object and assigned to a dataset using the stock symbol as the name. To convert the data to dataframe structure, we used ‘as.data.frame(get(stock_index))’ to change the structure. Then, we added <code>Date</code> column and <code>Stock Index</code> column and filtered the data to only keep the closing price.
-With a for-loop, we downloaded the closing price of each stock one by one and appended them together in one dataframe.</p>
-<div id="stock-symbols" class="section level4" number="3.2.0.1">
-<h4><span class="header-section-number">3.2.0.1</span> Stock symbols</h4>
-</div>
-<div id="download-and-import-data" class="section level4" number="3.2.0.2">
-<h4><span class="header-section-number">3.2.0.2</span> Download and import data</h4>
-<pre><code>## downloading  NFLX .....
-## 
-## done.
-## downloading  DIS .....
-## 
-## done.
-## downloading  T .....
-## 
-## done.
-## downloading  ROKU .....
-## 
-## done.</code></pre>
-<pre><code>## downloading  AMZN .....
-## 
-## done.
-## downloading  OSTK .....
-## 
-## done.
-## downloading  APRN .....
-## 
-## done.
-## downloading  W .....
-## 
-## done.
-## downloading  ETSY .....
-## 
-## done.
-## downloading  CHWY .....
-## 
-## done.
-## downloading  FTCH .....
-## 
-## done.</code></pre>
-<pre><code>## downloading  EA .....
-## 
-## done.
-## downloading  NTDOY .....
-## 
-## done.
-## downloading  SCPL .....
-## 
-## done.
-## downloading  TTWO .....
-## 
-## done.
-## downloading  ATVI .....
-## 
-## done.</code></pre>
-<pre><code>## downloading  ZM .....
-## 
-## done.
-## downloading  CSCO .....
-## 
-## done.
-## downloading  EGHT .....
-## 
-## done.
-## downloading  RNG .....
-## 
-## done.
-## downloading  LOGM .....
-## 
-## done.</code></pre>
-<pre><code>## downloading  MSFT .....
-## 
-## done.
-## downloading  GOOGL .....
-## 
-## done.
-## downloading  TWTR .....
-## 
-## done.
-## downloading  FB .....
-## 
-## done.
-## downloading  AAPL .....
-## 
-## done.</code></pre>
-</div>
-<div id="scale-stock-closing-price" class="section level4" number="3.2.0.3">
-<h4><span class="header-section-number">3.2.0.3</span> Scale stock closing price</h4>
-<p>To scale the data, each closing price value is divided by the value of first date (January 2, 2020) for that stock and multiplied by 100.</p>
-</div>
+With a for-loop, we downloaded the closing price of each stock one by one and appended them together in one dataframe.
+To scale the data, each closing price value is divided by the value of first date (January 2, 2020) for that stock and multiplied by 100.</p>
 </div>
 <div id="investors-confidence-index-1" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Investors’ confidence index</h2>
