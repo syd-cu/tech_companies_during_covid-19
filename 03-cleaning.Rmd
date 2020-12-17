@@ -49,9 +49,9 @@ stock_list_other <- c("MSFT", "GOOGL", "TWTR", "FB", "AAPL")
 streaming_stock <- NULL
 for (idx in seq(length(stock_list_streaming))){
   stock_index = stock_list_streaming[idx]
-  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
-  temp_df = as.data.frame(get(stock_index))
+  
+  temp_df = as.data.frame(getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE))
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
   row.names(temp_df) = NULL
@@ -68,9 +68,11 @@ for (idx in seq(length(stock_list_streaming))){
 shopping_stock <- NULL
 for (idx in seq(length(stock_list_shopping))){
   stock_index = stock_list_shopping[idx]
-  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
-  temp_df = as.data.frame(get(stock_index))
+
+  temp_df = as.data.frame(getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE))
+  
+  
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
   row.names(temp_df) = NULL
@@ -87,9 +89,11 @@ for (idx in seq(length(stock_list_shopping))){
 entertainment_stock <- NULL
 for (idx in seq(length(stock_list_entertainment))){
   stock_index = stock_list_entertainment[idx]
-  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
-  temp_df = as.data.frame(get(stock_index))
+  
+  
+  temp_df = as.data.frame(getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE))
+  
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
   row.names(temp_df) = NULL
@@ -107,9 +111,10 @@ for (idx in seq(length(stock_list_entertainment))){
 wfl_stock <- NULL
 for (idx in seq(length(stock_list_wfl))){
   stock_index = stock_list_wfl[idx]
-  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
-  temp_df = as.data.frame(get(stock_index))
+  
+  temp_df = as.data.frame(getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE))
+  
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
   row.names(temp_df) = NULL
@@ -127,9 +132,10 @@ for (idx in seq(length(stock_list_wfl))){
 other_stock <- NULL
 for (idx in seq(length(stock_list_other))){
   stock_index = stock_list_other[idx]
-  getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
-             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE)
-  temp_df = as.data.frame(get(stock_index))
+  
+  temp_df = as.data.frame(getSymbols(stock_index, verbose = TRUE, src = "yahoo", 
+             from = '2020-01-01', to = "2020-12-11",auto.assign=FALSE))
+  
   temp_df$Date = row.names(temp_df)
   temp_df$Index = stock_index
   row.names(temp_df) = NULL
