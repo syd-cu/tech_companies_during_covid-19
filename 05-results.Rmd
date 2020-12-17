@@ -4,12 +4,409 @@ editor_options:
   chunk_output_type: console
 ---
 # Results
-## Question 1: How did the stock market behave for tech companies during Covid-19?  
+## Question 1: How did tech companies behave in stock market under the Covid-19 pandemic? 
+
+In this part, we created line charts of stock price, quarterly revenue and quarterly revenue's year-on-year growth for companies from different technology industries. Within each industry, using daily stock closing price as the main merit, together with the quarterly revenue and business models for different companies, we compared and analyzed companies performance under the Covid-19 pandemic and identified a performace pattern for each industry. 
+
+To begin with, note that every stock price line chart below shows that there is a sudden drop for each line in between February and April, which means that every company's stock price experienced some devastating crashes between the end of February and the begining of April. This is due to the 2020 stock market crash, also referred to as the Coronavirus Crash. It was a major and sudden global stock market crash that began on February 20 and ended on April 7. The crash signalled the beginning of the Covid-19 recession. And our focus is analyzing companies performace after that crash point and the start of Covid-19 pandemic.
+
+To facilitate our analysis, we scaled the stock closing price to make each stock's closing price start at 100 on January 2.
+
+#### Streaming service - Companies with mature and diversified online businesses performed strongly, while companies still in transition to online business felt under attack.
+
+```{r}
+# streaming stock
+streaming_stock <- read.csv('./data/streaming_stock.csv')
+streaming_stock <- streaming_stock %>%
+  mutate(Company = fct_recode(Index, Disney="DIS", Netflix = "NFLX", Roku="ROKU", "AT&T"="T")) %>%
+  rename(`Scaled Stock Closing Price` = Close_scale)
+
+streaming_stock$Date <- as.Date(streaming_stock$Date)
+stream_stock_plot <- ggplot(data = streaming_stock) +
+  geom_line( aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  labs (x = "Date", 
+        y = "Scaled Closing Price",
+        title = "2020 Daily Scaled Stock Closing Price (Streaming)") +
+  scale_color_manual(values=c("red", "green", "blue", "purple"),
+                     name = "") +
+  theme_light()
+
+p_streaming <- ggplotly(stream_stock_plot)
+
+# streaming rev
+quarter_rev = read.csv('./data/quarterly_rev.csv')
+
+streaming_rev <- quarter_rev %>% 
+  select(Date, netflix, disney, att, roku) %>%
+  gather(key = Company, value = Revenue, -Date) %>%
+  mutate(Company = forcats::fct_reorder2(Company, Date, Revenue)) %>%
+  mutate(Rev_quater_growth = (Revenue - lag(Revenue))/lag(Revenue),
+         Rev_year_growth = (Revenue - lag(Revenue, n = 4L))/lag(Revenue, n = 4L),
+         Date = as.Date(Date)) %>%
+  filter(Date >= as.Date("2019-12-31")) %>%
+  mutate(Date = c("2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3"))%>%
+  group_by(Company) %>%
+  mutate(Revenue_scaled = (Revenue - mean(Revenue)) / sd(Revenue)) %>%
+  ungroup()
+
+streaming_rev_facet <- rbind(
+  data.frame(Date = streaming_rev$Date, Company = streaming_rev$Company, num = streaming_rev$Rev_year_growth, what = "Year-on-year Growth"),
+  data.frame(Date = streaming_rev$Date, Company = streaming_rev$Company, num = streaming_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
+)
+
+secondFacet <- FALSE
+streaming_rev_plot_facet <- ggplot(data = streaming_rev_facet) +
+  facet_grid(what~., scale = "free") +
+  geom_line(data=streaming_rev_facet[streaming_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=streaming_rev_facet[streaming_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
+  geom_line(data=streaming_rev_facet[streaming_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=streaming_rev_facet[streaming_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 4) +
+  scale_y_continuous(name = NULL, labels = function(b) {
+    if(!secondFacet) {
+      secondFacet <<- TRUE 
+      return(paste0(round(b * 100, 0), "%"))
+    }else{
+      return(b)
+    }
+  }
+) +
+  labs(x = "Quarter",
+       title = "2019 Q4 ~ 2020 Q3 Quarterly Revenue and Year-on-year Growth (Streaming)") +
+  scale_color_manual(values=c("purple", "red", "green", "blue"), 
+                       name="",
+                       breaks=c("disney", "netflix", "roku", "att"),
+                       labels=c("Disney", "Netflix", "Roku", "AT&T"))
+```
+
+```{r}
+p_streaming
+```
+
+```{r}
+streaming_rev_plot_facet
+```
+
+With restriction on traveling and social-distancing measures in place, online streaming service are witnessing a surge in users. From the stock price line plot, Netflix and Roku both staged a strong recovery from the breakdown in March and continued to grow strongly since then, while Disney and AT&T remained sluggish after March for a long time.
+
+Netflix dazzled investors with its robust growth in subscribers and revenue. The stable growth of its stock and revenue can be attributted to the Covid-19 pandemic, which boosted the usage of streaming media services as more people stayed home. Together with Netflix's massive base of subscribers shaped over a long period of time, the economies of scale also helped Netflix gain a clear advantage over other competitors.
+
+Roku shows an more explosive growth in stock price in the past 6 months. While both occupy a significant portion of the streaming TV market, Roku and Netflix are two fundamentally different companies. Netflix operates as a subscription service while Roku’s business is based on streaming players and free content supported by ad-revenue. Besides the growing user base, Roku's higher ad revenue also helped boost the stock price and the overall revenue.
+
+Things become different for Disney and AT&T, whose businesses are not limited to streaming service. AT&T mainly provids wireless, wireline, and pay TV services. After AT&T bought Time Warner two years ago, it began to plan its new streaming media ecosystem. However, its wireless business struggled in the first half of the year as the Covid-19 crisis shut down retailers, and the WarnerMedia group faced closed theaters and postponed movies. Similarly, apart from streaming service, a large part of Disney's revenue comes from its parks and resorts. Because of the theme park closures and the slowdown in the tourism sector during the pandemic, COVID-19 had brought a continuous loss in Disney's quarterly revenues from 2019 Q4 to 2020 Q2. But there were a few bright spots. The newly launched Disney Plus, its Netflix challenger, attracted millions of subscribers since launching and made its stock and revenue get a lift in the past few months.
 
 
+#### Entertainment (Gaming) - Gaming companies took the opportunity and got rich together.
+
+```{r}
+# Gaming stock
+entertainment_stock <- read.csv('./data/entertainment_stock.csv')
+entertainment_stock <- entertainment_stock %>%
+  mutate(Company = fct_recode(Index, `Activision Blizzard`="ATVI", `Electronic Arts` = "EA", Nintendo="NTDOY", Sciplay="SCPL", `Take-Two Interactive`="TTWO")) %>%
+  rename(`Scaled Stock Closing Price` = Close_scale)
+
+entertainment_stock$Date <- as.Date(entertainment_stock$Date)
+entertainment_stock_plot <- ggplot(data = entertainment_stock) +
+  geom_line( aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  labs (x = "Date", 
+        y = "Scaled Closing Price",
+        title = "2020 Daily Scaled Stock Closing Price (Gaming)") +
+  scale_color_manual(values=c("orange", "skyblue", "salmon", "olivedrab", "maroon"), 
+                       name="") +
+  theme_light()
+
+p_entertainment <- ggplotly(entertainment_stock_plot)
+
+# Gaming rev
+entertainment_rev <- quarter_rev %>% 
+  select(Date, ea, sciplay, ttwo, atvi) %>%
+  gather(key = Company, value = Revenue, -Date) %>%
+  mutate(Company = forcats::fct_reorder2(Company, Date, Revenue)) %>%
+  mutate(Rev_quater_growth = (Revenue - lag(Revenue))/lag(Revenue),
+         Rev_year_growth = (Revenue - lag(Revenue, n = 4L))/lag(Revenue, n = 4L),
+         Date = as.Date(Date)) %>%
+  filter(Date >= as.Date("2019-12-31")) %>%
+  mutate(Date = c("2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3"))%>%
+  group_by(Company) %>%
+  mutate(Revenue_scaled = (Revenue - mean(Revenue)) / sd(Revenue)) %>%
+  ungroup()
+
+entertainment_rev_facet <- rbind(
+  data.frame(Date = entertainment_rev$Date, Company = entertainment_rev$Company, num = entertainment_rev$Rev_year_growth, what = "Year-on-year Growth"),
+  data.frame(Date = entertainment_rev$Date, Company = entertainment_rev$Company, num = entertainment_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
+)
+
+secondFacet <- FALSE
+entertainment_rev_plot_facet <- ggplot(data = entertainment_rev_facet) +
+  facet_grid(what~., scale = "free") +
+  geom_line(data=entertainment_rev_facet[entertainment_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=entertainment_rev_facet[entertainment_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
+  geom_line(data=entertainment_rev_facet[entertainment_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=entertainment_rev_facet[entertainment_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 4) +
+  scale_y_continuous(name = NULL, labels = function(b) {
+    if(!secondFacet) {
+      secondFacet <<- TRUE 
+      return(paste0(round(b * 100, 0), "%"))
+    }else{
+      return(b)
+    }
+  }
+) +
+  labs(x = "Quarter",
+       title = "2019 Q4 ~ 2020 Q3 Quarterly Revenue and Year-on-year Growth (Gaming)") +
+  scale_color_manual(values=c("orange", "skyblue", "maroon", "olivedrab"), 
+                       name="Company",
+                       breaks=c("atvi", "ea", "sciplay", "ttwo"),
+                       labels=c("Activision Blizzard", "Electronic Arts", "Sciplay", "Take-Two Interactive"))
+```
+
+```{r}
+p_entertainment
+```
+
+```{r}
+entertainment_rev_plot_facet
+```
+
+Companies from gaming industry generally have similar performance to Netflix and Roku, that is to say, quick bounce-back from March, sustainable and strong growth. 
+
+This is accordant with people's favor and engagement in video gaming during the pandemic, and video gaming companies’ new products catered to appeal to consumers. For many people, Covid-19 lockdowns quickly increased the number of hours spent in front of screens and also inspired millions to try new digital activities. With school and office closures, work furloughs, and canceled travel plans, more people are playing video games and more are upgrading their gaming relationships from casual to committed. Taking this opportunity, gaming companies not only kept launching new game products from simple mobile games to immersive multiplayer experiences, but also implemented sophisticated marketing campaigns tailored to a whole new audience. As a result, their stock price kept growing steadily after the breakout of the pandemic.
+
+But when people begin returning to school and work schedules, will video games maintain their share of entertainment time? Since August, the stock price of most companies displays a slower pace of growth and enter a shock period. Together with their revenue drop in 2020 Q3, it seems that, from game studios and publishers to console makers, they are still seeking a way to convert more casual gamers into long-term customers.
 
 
+#### Ecommerce - They were all benefited from the same pandemic but different profit sources.
 
+```{r}
+# online shopping stock
+shopping_stock <- read.csv('./data/shopping_stock.csv')
+shopping_stock <- shopping_stock %>%
+  mutate(Company = fct_recode(Index, Amazon="AMZN", `Blue Apron` = "APRN", Chewy="CHWY", Etsy="ETSY", Farfetch="FTCH", Overstock="OSTK", Wayfair="W")) %>%
+  rename(`Scaled Stock Closing Price` = Close_scale)
+
+shopping_stock$Date <- as.Date(shopping_stock$Date)
+shopping_stock_plot <- ggplot(data = shopping_stock) +
+  geom_line( aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  labs (x = "Date", 
+        y = "Scaled Closing Price",
+        title = "2020 Daily Scaled Stock Closing Price (Ecommerce)") +
+  scale_color_manual(values=c("tomato", "violet", "steelblue", "gold", "brown", "black", "seagreen"), 
+                       name="") +
+  theme_light()
+
+p_shopping <- ggplotly(shopping_stock_plot)
+
+# online shopping rev
+shopping_rev <- quarter_rev %>% 
+  select(Date, amazon, overstock, blue_apron, wayfair, etsy, farfetch) %>%
+  gather(key = Company, value = Revenue, -Date) %>%
+  mutate(Company = forcats::fct_reorder2(Company, Date, Revenue)) %>%
+  mutate(Rev_quater_growth = (Revenue - lag(Revenue))/lag(Revenue),
+         Rev_year_growth = (Revenue - lag(Revenue, n = 4L))/lag(Revenue, n = 4L),
+         Date = as.Date(Date)) %>%
+  filter(Date >= as.Date("2019-12-31")) %>%
+  mutate(Date = c("2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3"))%>%
+  group_by(Company) %>%
+  mutate(Revenue_scaled = (Revenue - mean(Revenue)) / sd(Revenue)) %>%
+  ungroup()
+
+shopping_rev_facet <- rbind(
+  data.frame(Date = shopping_rev$Date, Company = shopping_rev$Company, num = shopping_rev$Rev_year_growth, what = "Year-on-year Growth"),
+  data.frame(Date = shopping_rev$Date, Company = shopping_rev$Company, num = shopping_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
+)
+
+secondFacet <- FALSE
+shopping_rev_plot_facet <- ggplot(data = shopping_rev_facet) +
+  facet_grid(what~., scale = "free") +
+  geom_line(data=shopping_rev_facet[shopping_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=shopping_rev_facet[shopping_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
+  geom_line(data=shopping_rev_facet[shopping_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=shopping_rev_facet[shopping_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 4) +
+  scale_y_continuous(name = NULL, labels = function(b) {
+    if(!secondFacet) {
+      secondFacet <<- TRUE 
+      return(paste0(round(b * 100, 0), "%"))
+    }else{
+      return(b)
+    }
+  }
+) +
+  labs(x = "Quarter",
+       title = "2019 Q4~2020 Q3 Quarterly Revenue and Year-on-year Growth (Ecommerce)") +
+  scale_color_manual(values=c("tomato", "seagreen", "brown", "black", "gold", "violet"), 
+                       name="Company",
+                       breaks=c("amazon", "blue_apron", "etsy", "farfetch", "overstock", "wayfair"),
+                       labels=c("Amazon", "Blue Apron", "Etsy", "Farfetch", "Overstock", "Wayfair"))
+```
+
+```{r}
+p_shopping
+```
+
+```{r}
+shopping_rev_plot_facet
+```
+
+Ecommerce companies' stock prices have been steadily increasing for almost the whole year. After the crash in March, they quickly regained their previous values, climbed to a higher level than before and stay in the high level until today. Their stock prices have been major beneficiaries of the Covid-19 pandemic, which has served as a catalyst for ecommerce growth in the US as consumers shifted to online shopping to social distance and avoid crowded stores.
+
+While the steady performance of Amazon is not surprising under the accelerated growth of Amazon's Prime membership base and Amazon's accelerated adoption of cloud services, the other relatively small companies also found their ways of earning money. Etsy has directly benefited from the sale of masks to prevent the spread of COVID-19. And more surprisingly, Overstock stock has been on fire this year. As shown in the revnue plot, the pandemic has generated a business boom for Overstock and has improved its revenue. The pandemic is driving households to spend more on home furnishing items. Also, home furnishing purchases have shifted more to online purchases, which bodes well for Overstock, whose focus is the online home furnishing sales. In addition, Overstock has much cheaper stock price, which is particularly attractive for a number of small investors.
+
+
+#### Videoconferencing - Burgeoning industry fueled by pandemic, Zoom is the big winner.
+
+```{r}
+# wfh stock
+wfl_stock <- read.csv('./data/wfl_stock.csv')
+wfl_stock <- wfl_stock %>%
+  mutate(Company = fct_recode(Index, `Cisco System`="CSCO", `8×8` = "EGHT", LogMeIn="LOGM", RingCentral="RNG", Zoom="ZM")) %>%
+  rename(`Scaled Stock Closing Price` = Close_scale)
+
+wfl_stock$Date <- as.Date(wfl_stock$Date)
+wfl_stock_plot <- ggplot(data = wfl_stock) +
+  geom_line(aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  labs (x = "Date", 
+        y = "Scaled Closing Price",
+        title = "2020 Daily Scaled Stock Closing Price (Videoconferencing)") +
+  scale_color_manual(values=c("springgreen", "burlywood", "cyan", "darkgrey", "firebrick"), 
+                       name="") +
+  theme_light()
+
+p_wfl <- ggplotly(wfl_stock_plot)
+
+# wfh rev
+wfl_rev <- quarter_rev %>% 
+  select(Date, eght, rng) %>%
+  gather(key = Company, value = Revenue, -Date) %>%
+  mutate(Company = forcats::fct_reorder2(Company, Date, Revenue)) %>%
+  mutate(Rev_quater_growth = (Revenue - lag(Revenue))/lag(Revenue),
+         Rev_year_growth = (Revenue - lag(Revenue, n = 4L))/lag(Revenue, n = 4L),
+         Date = as.Date(Date)) %>%
+  filter(Date >= as.Date("2019-12-31")) %>%
+  mutate(Date = c("2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3"))%>%
+  group_by(Company) %>%
+  mutate(Revenue_scaled = (Revenue - mean(Revenue)) / sd(Revenue)) %>%
+  ungroup()
+
+wfl_rev_facet <- rbind(
+  data.frame(Date = wfl_rev$Date, Company = wfl_rev$Company, num = wfl_rev$Rev_year_growth, what = "Year-on-year Growth"),
+  data.frame(Date = wfl_rev$Date, Company = wfl_rev$Company, num = wfl_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
+)
+
+secondFacet <- FALSE
+wfl_rev_plot_facet <- ggplot(data = wfl_rev_facet) +
+  facet_grid(what~., scale = "free") +
+  geom_line(data=wfl_rev_facet[wfl_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=wfl_rev_facet[wfl_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
+  geom_line(data=wfl_rev_facet[wfl_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=wfl_rev_facet[wfl_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 4) +
+  scale_y_continuous(name = NULL, labels = function(b) {
+    if(!secondFacet) {
+      secondFacet <<- TRUE 
+      return(paste0(round(b * 100, 0), "%"))
+    }else{
+      return(b)
+    }
+  }
+) +
+  labs(x = "Quarter",
+       title = "2019 Q4 ~ 2020 Q3 Quarterly Revenue and Year-on-year Growth (Videoconferencing)") +
+  scale_color_manual(values=c("darkgrey", "burlywood"), 
+                       name="Company",
+                       breaks=c("eght", "rng"),
+                       labels=c("8×8", "RingCentral"))
+```
+
+```{r}
+p_wfl
+```
+
+Cloud services are in higher demand than ever. Videoconferencing and remote collaboration use are at all-time highs as companies scramble to keep employees productive and schools' transition to online remote learning. Zoom stock showed waves of explosive growth this year, as its video conferencing software became an indispensable tool for people working and learning from home through Covid-19. It has emerged as the video conferencing platform of choice through the pandemic, mainly becauce of its easy user interface, simple sign-up process and free services.
+
+But recently since September, there has been some news like physical economy is likely to open up further through 2021, with many developed countries likely to have access to a highly effective Covid-19 vaccine starting from the next spring. This has put the brakes on Zoom’s growth and made it enter to a shock period. However, it will take some time for people to get vaccinated. Moreover, as companies look to cut costs, and give employees more flexibility, the trend of working from home appears to be here to stay even after the pandemic ends in the future. This should ensure that demand for videoconferencing product and the stock price holds up for now. 
+
+
+#### Tech Giants - Traditional giants put up a solid performance and they are untouchable.
+
+```{r}
+# Tech giants stock
+other_stock <- read.csv('./data/other_stock.csv')
+other_stock <- other_stock %>%
+  mutate(Company = fct_recode(Index, Facebook="FB", Google = "GOOGL", Microsoft="MSFT", Twitter="TWTR", Apple="AAPL")) %>%
+  rename(`Scaled Stock Closing Price` = Close_scale)
+
+other_stock$Date <- as.Date(other_stock$Date)
+other_stock_plot <- ggplot(data = other_stock) +
+  geom_line(aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  labs (x = "Date", 
+        y = "Scaled Closing Price",
+        title = "2020 Daily Scaled Stock Closing Price (Tech Giants)") +
+  scale_color_manual(values=c("deeppink", "dodgerblue", "chocolate", "forestgreen", "slategrey"), 
+                       name="") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+  theme_light()
+
+p_other <- ggplotly(other_stock_plot)
+
+# Tech giants rev
+other_rev <- quarter_rev %>% 
+  select(Date, msft, goog, twtr, fb, aapl) %>%
+  gather(key = Company, value = Revenue, -Date) %>%
+  mutate(Company = forcats::fct_reorder2(Company, Date, Revenue)) %>%
+  mutate(Rev_quater_growth = (Revenue - lag(Revenue))/lag(Revenue),
+         Rev_year_growth = (Revenue - lag(Revenue, n = 4L))/lag(Revenue, n = 4L),
+         Date = as.Date(Date)) %>%
+  filter(Date >= as.Date("2019-12-31")) %>%
+  mutate(Date = c("2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3"))%>%
+  group_by(Company) %>%
+  mutate(Revenue_scaled = (Revenue - mean(Revenue)) / sd(Revenue)) %>%
+  ungroup()
+
+other_rev_facet <- rbind(
+  data.frame(Date = other_rev$Date, Company = other_rev$Company, num = other_rev$Rev_year_growth, what = "Year-on-year Growth"),
+  data.frame(Date = other_rev$Date, Company = other_rev$Company, num = other_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
+)
+
+secondFacet <- FALSE
+other_rev_plot_facet <- ggplot(data = other_rev_facet) +
+  facet_grid(what~., scale = "free") +
+  geom_line(data=other_rev_facet[other_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=other_rev_facet[other_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
+  geom_line(data=other_rev_facet[other_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=other_rev_facet[other_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 4) +
+  scale_y_continuous(name = NULL, labels = function(b) {
+    if(!secondFacet) {
+      secondFacet <<- TRUE 
+      return(paste0(round(b * 100, 0), "%"))
+    }else{
+      return(b)
+    }
+  }
+) +
+  labs(x = "Quarter",
+       title = "2019 Q4~2020 Q3 Quarterly Revenue and Year-on-year Growth (Tech Giants)") +
+  scale_color_manual(values=c("deeppink", "chocolate", "forestgreen", "dodgerblue", "slategrey"), 
+                       name="Company",
+                       breaks=c("fb", "goog", "msft", "twtr", "aapl"),
+                       labels=c("Facebook", "Google", "Microsoft", "Twitter", "Apple"))
+```
+
+```{r}
+p_other
+```
+
+Not only have stocks of tech giants played a crucial role in stock market’s swift recovery following the Covid-19-induced mini-crash in March, the pandemic has turned them into a sanctuary for investors since then.
+And this steady and sustainable performance of tech giants is justifiable, given that these companies are highly profitable and their business models are widely diversified and ideally suited to the pandemic.
+
+While other companies saw revenue collapse as populations were ordered to stay at home, the tech giants enjoyed a rush of demand. When locked at home, people go shopping on Amazon, play with their iPhone's, google stuff, contact friends on Facebook and Twitter, stream movies on Netflix or hold meetings with colleagues on Microsoft Teams.The strong performance of tech giants stock is a epitome of the strong momentum of the whole tech industry for the past year.
+
+
+#### Summary
+
+To sum up, tech companies with mature online business have gained traction over the past few months as the coronavirus pandemic locked most people indoors, but different companies from different industries have different survival mechanisms specifically. Looking to the future, when people begin returning to school and work schedules after the pandemic, will those companies dramatically fueled by Covid-19 maintain their price values and shape up their truely sustainable business models?
 
 
 
