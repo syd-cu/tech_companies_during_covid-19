@@ -4,7 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 # Data sources
-```{r,eval=FALSE}
+```{r}
 library(rvest)
 library(readr)
 library(quantmod)
@@ -61,7 +61,7 @@ for (j in 2:24) {
 }
 
 joined = joined[-c(11, 17, 18)]
-write.csv(joined, file='./data/quarterly_rev.csv', index = FALSE)
+write.csv(joined, file='./data/quarterly_rev.csv')
 ```
 
 ### Example for extracting Netflix quarterly revenue 
