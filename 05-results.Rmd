@@ -30,7 +30,7 @@ streaming_stock <- streaming_stock %>%
 streaming_stock$Date <- as.Date(streaming_stock$Date)
 stream_stock_plot <- ggplot(data = streaming_stock) +
   geom_line( aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
   labs (x = "Date", 
         y = "Scaled Closing Price",
         title = "2020 Daily Scaled Stock Closing Price (Streaming)") +
@@ -114,7 +114,7 @@ entertainment_stock <- entertainment_stock %>%
 entertainment_stock$Date <- as.Date(entertainment_stock$Date)
 entertainment_stock_plot <- ggplot(data = entertainment_stock) +
   geom_line( aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
   labs (x = "Date", 
         y = "Scaled Closing Price",
         title = "2020 Daily Scaled Stock Closing Price (Gaming)") +
@@ -194,7 +194,7 @@ shopping_stock <- shopping_stock %>%
 shopping_stock$Date <- as.Date(shopping_stock$Date)
 shopping_stock_plot <- ggplot(data = shopping_stock) +
   geom_line( aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
   labs (x = "Date", 
         y = "Scaled Closing Price",
         title = "2020 Daily Scaled Stock Closing Price (Ecommerce)") +
@@ -272,7 +272,7 @@ wfl_stock <- wfl_stock %>%
 wfl_stock$Date <- as.Date(wfl_stock$Date)
 wfl_stock_plot <- ggplot(data = wfl_stock) +
   geom_line(aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
   labs (x = "Date", 
         y = "Scaled Closing Price",
         title = "2020 Daily Scaled Stock Closing Price (Videoconferencing)") +
@@ -346,7 +346,7 @@ other_stock <- other_stock %>%
 other_stock$Date <- as.Date(other_stock$Date)
 other_stock_plot <- ggplot(data = other_stock) +
   geom_line(aes(Date, `Scaled Stock Closing Price`, color = Company, group=Company)) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%Y\n%m-%d") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
   labs (x = "Date", 
         y = "Scaled Closing Price",
         title = "2020 Daily Scaled Stock Closing Price (Tech Giants)") +
@@ -417,9 +417,9 @@ To sum up, tech companies with mature online business have gained traction over 
 
 
 ## Question 2: How do tech companies perform with respect to other measurements? 
-In the 2nd part, firstly, we created stock line chart that overlays CI bar chart across different tech services provider to explore the potential correlation between investors' stock CI and stock closing price. 
+In the second part, firstly, we created stock line chart that overlays CI bar chart across different tech services provider to explore the potential correlation between investors' stock CI and stock closing price. 
 
-Moreover, Parrallel Coordinates plots were created to explore the potential correlations between Quarterly CI and companies' quarterly revenue. 
+Moreover, parallel coordinates plots were created to explore the potential correlations between Quarterly CI and companies' quarterly revenue. By looking at the parallel coordinates plots, we mainly focus on comparing the companies performance with itself in pre and post-COVID 19 situations.
 ```{r}
 library(tidyverse)
 library(ggplot2)
@@ -539,8 +539,9 @@ ci_standized_copy <-ci_standized%>%
   filter(Date>="2020-3-1"&Date<="2020-10-1")
 ```
 
-### Confidence index and stock closing price(standardized) 
+### Confidence Index and Stock Closing Price(Standardized) 
 #### Streaming Services {-#my-section}
+
 ```{r}
 p1<-ggplot(ci_standized_copy,aes(Date, std_ind_index))
 
@@ -551,7 +552,7 @@ p1<-p1+ geom_bar(stat="identity",alpha=0.75)+
 
 f1<-p1+ geom_line(aes(Date, Close, color=Index), std_streaming_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
-  labs(title="stock closing price & CI in 2020 (Streaming)",color="Company")+
+  labs(title="Stock Closing Price & CI in 2020 (Streaming)",color="Company")+
 scale_color_manual(values=c("red", "green", "blue", "purple"),
                      name = "") +
   theme_light()+
@@ -564,7 +565,7 @@ As shown in the plot, despite of decreasing confidence index,  stock price of in
 ```{r}
 f2<-p1+ geom_line(aes(Date, Close, color=Index), std_shopping_stock )+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
-  labs(title="Standardized stock closing price & Standardized CI in 2020(Online shopping)", color="Company")+
+  labs(title="Standardized Stock Closing Price &\n Standardized CI in 2020(E-Commerce)", color="Company")+
   scale_color_manual(values=c("tomato", "violet", "steelblue", "gold", "brown", "black", "seagreen"), 
                        name="") +
   theme_light()+
@@ -579,7 +580,7 @@ As shown in the plot, the performances of online-shopping companies in the stock
 ```{r}
 f3<-p1+ geom_line(aes(Date, Close, color=Index), std_entertainment_stock   )+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
-  labs(title="Standardized stock closing price & Standardized CI in 2020 (Entertainment)", color="Company")+
+  labs(title="Standardized stock closing price &\n Standardized CI in 2020 (Entertainment)", color="Company")+
   scale_color_manual(values=c("orange", "skyblue", "salmon", "olivedrab", "maroon"), name="") +
   theme_light()+
   theme(plot.title = element_text(hjust = 0.5))
@@ -594,7 +595,7 @@ Stock price of Entertainment companies had overall increasing tendency which out
 ```{r}
 f4<-p1+ geom_line(aes(Date, Close, color=Index), std_wfh_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
-  labs(title="Standardized stock closing price  Standardized CI in 2020(work from home)", color="Company")+
+  labs(title="Standardized Stock Closing Price&\n  Standardized CI in 2020(Work-From-Home)", color="Company")+
   scale_color_manual(values=c("springgreen", "burlywood", "cyan", "darkgrey", "firebrick"), name="") +
   theme_light()+
   theme(plot.title = element_text(hjust = 0.5))
@@ -607,7 +608,7 @@ Stock of price of Zoom outperforms investors' expectation since April.  However,
 ```{r, include = FALSE}
 f5<-p1+ geom_line(aes(Date, Close, color=Index), std_other_stock)+
   scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
-  labs(title="Standardized stock closing price & Standardized CI in 2020 (Other category)", color="Company")+
+  labs(title="Standardized Stock Closing Price &\n Standardized CI in 2020 (Other Category)", color="Company")+
   scale_color_manual(values=c("deeppink", "dodgerblue", "chocolate", "forestgreen", "slategrey"), name="")
   theme_light()+
   theme(plot.title = element_text(hjust = 0.5))
@@ -671,6 +672,7 @@ combo_data<- std_rev%>%
 
 #### Streaming Services {-#my-section}
 ```{r}
+combo_data['X'] = NULL
 streaming<-combo_data%>%
   select(Date,Std_individual_CI, 5, 1:2, 4)
 streaming_p<-parcoords::parcoords(streaming,
@@ -687,9 +689,9 @@ streaming_p<-parcoords::parcoords(streaming,
 )
 streaming_p
 ```
-Before COVID-19, there is a positive correlation between investors' confidence level and revenue of streaming companies.  Compared to 1st quarter of 2019, 2nd quarter of 2019's CI increased, and the revenue for streaming companies increased as well.
+Before COVID-19, there is a positive correlation between investors' confidence level and revenue of streaming companies.  Compared to 1st quarter of 2019, second quarter of 2019's CI increased, and the revenue for streaming companies increased as well.
 
-After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across different streaming companies increased.
+After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 second quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across different streaming companies increased.
 
 #### E-Commerce {-#my-section}
 ```{r}
@@ -712,7 +714,8 @@ shopping_p
 ```
 
 Both before and after COVID-19, there is a negative correlation between investors' expectation of stock market and revenue of online-shopping companies.  
-Before COVID-19, compared to CI of 2019 1st quarter , 2nd quarter of 2019's CI increased but the revenue is less than that of the 1st quarter.After COVID-19, for example,  although the CI of 2020 3rd quarter decreased compared with that of 2020 2nd quarter, the revenue of companies like Farfetch, Amazon and Etsy increased as well. 
+
+Before COVID-19, compared to CI of 2019 1st quarter , second quarter of 2019's CI increased but the revenue is less than that of the 1st quarter.After COVID-19, for example,  although the CI of 2020 3rd quarter decreased compared with that of 2020 second quarter, the revenue of companies like Farfetch, Amazon and Etsy increased as well. 
 
 
 #### Entertainment/Gaming {-#my-section}
@@ -739,11 +742,11 @@ entertainment_p<-parcoords::parcoords(entertainment,
 entertainment_p
 
 ```
-Before COVID-19, there is a positive correlation between investors' confidence level and revenue of streaming companies.  Compared to 4th quarter of 2018, 2nd quarter of 2019's CI increased, and the revenue of two gaming companies increased as well.
+Before COVID-19, there is a positive correlation between investors' confidence level and revenue of streaming companies.  Compared to 4th quarter of 2018, second quarter of 2019's CI increased, and the revenue of two gaming companies increased as well.
 
-After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across two gaming companies shown increased.
+After COVID-19,there is a negative correlation between investors' confidence level and revenue of streaming companies.  For instance, compared to 2020 second quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter across two gaming companies shown increased.
 
-#### Videoconferencing {-#my-section}
+#### Video-conferencing {-#my-section}
 ```{r}
 wfh<-combo_data%>%
   select(Date,Std_individual_CI, 15:16)
@@ -767,9 +770,9 @@ wfh_p<-parcoords::parcoords(wfh,
 wfh_p
 
 ```
-Before COVID-19, there is a positive correlation between investors' confidence level and revenue of WFH companies. For example,  Compared to 1st quarter of 2019, 2nd quarter of 2019's CI increased, and the revenue increased as well.
+Before COVID-19, there is a positive correlation between investors' confidence level and revenue of WFH companies. For example,  Compared to 1st quarter of 2019, second quarter of 2019's CI increased, and the revenue increased as well.
 
-After COVID-19,there is a negative correlation between investors' confidence level and revenue of WFH companies.  For instance, compared to 2020 2nd quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter for two WFH companies increased.
+After COVID-19,there is a negative correlation between investors' confidence level and revenue of WFH companies.  For instance, compared to 2020 second quarter's CI,  the 2020 3rd quarter's CI decreased but the revenue of the 3rd quarter for two WFH companies increased.
 
 #### Tech Giants {-#my-section}
 ```{r}
