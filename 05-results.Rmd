@@ -1,1 +1,304 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Results
+## Question 1: How did the stock market behave for tech companies during Covid-19?  
+
+
+
+
+
+
+
+
+##Question 2: How do tech companies perform with respect to other measurements? 
+```{r}
+library(tidyverse)
+library(parcoords)
+library(d3r)
+library(plotly)
+```
+####CI and daily stock price graph 
+```{r}
+streaming_stk <-read.csv('./data/streaming_stock.csv')
+shopping_stk<-read.csv('./data/shopping_stock.csv')
+entertainment_stk<-read.csv('./data/entertainment_stock.csv')
+wfh_stk<-read.csv('./data/wfl_stock.csv')
+other_stk<-read.csv('./data/other_stock.csv')
+
+
+#change the format of the stock data
+streaming_stk_new<- streaming_stk%>%
+  select(-Close_scale)%>%
+  pivot_wider(names_from = Index, values_from = Close)
+shopping_stk_new<- shopping_stk%>%
+  select(-Close_scale)%>%
+  pivot_wider(names_from = Index, values_from = Close)
+entertainment_stk_new<- entertainment_stk%>%
+  select(-Close_scale)%>%
+  pivot_wider(names_from = Index, values_from = Close)
+wfh_stk_new<- wfh_stk%>%
+  select(-Close_scale)%>%
+  pivot_wider(names_from = Index, values_from = Close)
+other_stk_new<- other_stk%>%
+  select(-Close_scale)%>%
+  pivot_wider(names_from = Index, values_from = Close)
+
+
+#standardize stock price 
+standardize <-function(x)(x-mean(x,na.rm=TRUE))/sd(x, na.rm =TRUE)
+
+std_streaming_stock <-streaming_stk_new %>%
+  select_if(is.numeric)%>%
+  map_df(~standardize(.x))%>%
+  add_column(Date=streaming_stk_new$Date)%>%
+  mutate(Date=as.Date(Date, format="%Y-%m-%d"))%>%
+  pivot_longer(!Date, names_to="Index", values_to="Close")
+
+std_shopping_stock <-shopping_stk_new %>%
+  select_if(is.numeric)%>%
+  map_df(~standardize(.x))%>%
+  add_column(Date=shopping_stk_new$Date)%>%
+  mutate(Date=as.Date(Date, format="%Y-%m-%d"))%>%
+  pivot_longer(!Date, names_to="Index", values_to="Close")
+
+std_entertainment_stock <-entertainment_stk_new %>%
+  select_if(is.numeric)%>%
+  map_df(~standardize(.x))%>%
+  add_column(Date=entertainment_stk_new$Date)%>%
+  mutate(Date=as.Date(Date, format="%Y-%m-%d"))%>%
+  pivot_longer(!Date, names_to="Index", values_to="Close") 
+
+std_wfh_stock <-wfh_stk_new %>%
+  select_if(is.numeric)%>%
+  map_df(~standardize(.x))%>%
+  add_column(Date=wfh_stk_new$Date)%>%
+  mutate(Date=as.Date(Date, format="%Y-%m-%d"))%>%
+  pivot_longer(!Date, names_to="Index", values_to="Close")
+
+std_other_stock <-other_stk_new %>%
+  select_if(is.numeric)%>%
+  map_df(~standardize(.x))%>%
+  add_column(Date=other_stk_new$Date)%>%
+  mutate(Date=as.Date(Date, format="%Y-%m-%d"))%>%
+  pivot_longer(!Date, names_to="Index", values_to="Close")
+
+```
+
+```{r}
+#Standardized CI 
+ci_standized <- read.csv('./output/ci_standized')
+
+ci_standized_copy <-ci_standized%>%
+  mutate(Date=as.Date(Date, format="%Y-%m-%d"))%>%
+  filter(Date>="2020-3-1"&Date<="2020-10-1")
+
+
+```
+
+
+###Part 1: Is there a potential relationship between investors' confidence index and stock closing price?  
+###part 1 plots:  confidence index and stock closing price(standardized) (daily)
+```{r}
+p1<-ggplot(ci_standized_copy,aes(Date, std_ind_index))
+
+
+p1<-p1+ geom_bar(stat="identity",alpha=0.75)+
+  labs(y="standardized confidence index")+
+  geom_text(aes(label=round(std_ind_index,1)),coulor="black", fontface = "bold")
+
+f1<-p1+ geom_line(aes(Date, Close, color=Index), std_streaming_stock,size=0.7 )+
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
+  labs(title="Standardized stock closing price (bar) & Standardized confidence index(line) \nfrom 2020-03-01 to 2020-11-01 (Streaming)")+
+  theme_light()+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(f1)
+```
+*As shown in the plot, investors' confidence index is very low due to the outbreak of Covid-19 in the U.S. and stock market crash.  Stock closing price for all decreased dramatically in March.  Starting from the April, stock closing prices of Roku, Disney, and Netflix are continuously increasing despite the changes of investors' confidence index.  For AT&T, investors' confidence index might have some positive correlation with its stock closing price. *
+*Overall, streaming-service companies performs strongly since April, 2020.*
+
+```{r}
+f2<-p1+ geom_line(aes(Date, Close, color=Index), std_shopping_stock,size=0.7   )+
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
+  labs(title="Standardized stock closing price (bar) & Standardized confidence index(line) \nfrom 2020-03-01 to 2020-11-01 (Online shopping)", color="Stock Index")+
+  theme_light()+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(f2)
+
+```
+*According to the plot, stock closing prices of all online shopping companies except Blue Apron, had increasing tendency from  April to August regardless of investors' confidence index. When September's confidence index dropped to the lowest since March, stock closing prices of these companies seems to be impacted as well with a slight drop in prices. *
+*Blue Apron has some correlation with confidence index. In both April and June, when confidence index increased, the closing price of BA had two peaks.  When confidence index decreased since August, its closing price also reduced.*
+*Overall, stock closing prices of online-shopping companies have some correlation with confidence index. However, the correlation might not be strong.*
+
+
+```{r}
+f3<-p1+ geom_line(aes(Date, Close, color=Index), std_entertainment_stock,size=0.7   )+
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
+  labs(title="Standardized stock closing price (bar) & Standardized confidence index(line) \nfrom 2020-03-01 to 2020-11-01 (Entertainment)", color="Stock Index")+
+  theme_light()+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(f3)
+
+
+```
+*As shown in the plot, stock prices of the entertainment companies had an overall increasing tendency since March despite the changes in confidence index.  However, it also can be observed in March and September that stock price might be positively sensitive to confidence index. *
+```{r}
+f4<-p1+ geom_line(aes(Date, Close, color=Index), std_wfh_stock ,size=0.7   )+
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
+  labs(title="Standardized stock closing price (bar) & Standardized confidence index(line) \nfrom 2020-03-01 to 2020-11-01 (work from home)", color="Stock Index")+
+  theme_light()+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(f4)
+
+```
+*stock price of ll WFH companies except Cisco had increasing trend with slightly up and downs as confidence index changes. *
+*Zoom performs strongly since March. Even in September, when confidence index dropped, the stock price of zoom still kept increasing tendency.* 
+```{r}
+f5<-p1+ geom_line(aes(Date, Close, color=Index), std_other_stock,size=0.7    )+
+  scale_x_date(date_breaks = "1 month", date_labels = "%m-%d") +
+  labs(title="Standardized stock closing price (bar) & Standardized confidence index(line) \nfrom 2020-03-01 to 2020-11-01 (Other category)", color="Stock Index")+
+  theme_light()+
+  theme(plot.title = element_text(hjust = 0.5))
+ggplotly(f5)
+
+
+```
+*For companies in this category, it seems that there still a positive correlation between stock closing price and confidence index. Since April, as confidence index increase, stock price of these companies increase as well.  When there is a big drop in confidence index in September, stock price of these reduced dramatically.*
+
+
+
+###Part 2: Is there a potential relationship between investors' confidence index and revenue of companies?  
+
+```{r}
+ci_quarterly <-read.csv("./data/ci_quarterly.csv")
+#Standardize monthly ci_index
+standardize <-function(x)(x-mean(x))/sd(x)
+ci_q_standized<-ci_quarterly%>%
+  mutate(std_ind_index =  standardize(US.Individual.Index.Value),
+         Quarter=case_when(
+           Quarter=="Q4" ~"12-31",
+           Quarter=="Q3" ~"09-30",
+           Quarter=="Q2" ~"06-30",
+           Quarter=="Q1" ~"03-31"
+         ),
+         Date =paste(Year, Quarter, sep="-"),
+         Date = as.Date(Date))%>%
+  filter(Date>="2018-12-31"& Date<="2020-09-30")%>%
+  select(Date, std_ind_index)
+
+quarterly = read.csv('./data/quarterly_rev.csv')
+standardize <-function(x)(x-mean(x,na.rm=TRUE))/sd(x, na.rm =TRUE)
+std_rev <-quarterly %>%
+  select_if(is.numeric)%>%
+  map_df(~standardize(.x))%>%
+  add_column(Date=quarterly$Date)%>%
+  mutate(Date=as.Date(Date))
+#combine revenue and CI datasets together
+combo_data<- std_rev%>%
+  left_join(ci_q_standized, by="Date")%>%
+  rename("Std_individual_CI"=std_ind_index)%>%
+  arrange(Date)
+  
+```
+
+
+###Part 2: parrell coordinate plots: CI & revenue (quarterly) 
+```{r}
+streaming<-combo_data%>%
+  select(Date,Std_individual_CI, 1:2, 4:5)
+streaming_p<-parcoords::parcoords(streaming,
+              rownames=FALSE,
+              height = 450,
+              width = 700,
+              color=list(
+                colorBy ="Date",
+                colorScale="scaleOrdinal",
+                colorScheme = "schemeCategory10"),
+              withD3 = TRUE,
+              brushMode = "1D-axes",
+              alphaOnBrushed = 0.2
+)
+streaming_p
+```
+*For streaming companies, it seems that there is no strong correlation between quarterly revenue and quarterly confidence index.  For instance, compared to 2020 2nd quarter's confidence index,  the 2020 3rd quarter's decreased but the revenue of the 3rd quarter across different streaming companies increased. Moreover, compared to 1st quarter of 2019, 2nd quarter of 2019's confidence index increased, and the revenue for streaming companies increased as well. *
+
+```{r}
+shopping<-combo_data%>%
+  select(Date,Std_individual_CI, 3, 6:10)
+shopping_p<-parcoords::parcoords(shopping,
+              rownames=FALSE,
+              height = 450,
+              width = 700,
+              color=list(
+                colorBy ="Date",
+                colorScale="scaleOrdinal",
+                colorScheme = "schemeCategory10"),
+              withD3 = TRUE,
+              brushMode = "1D-axes",
+              alphaOnBrushed = 0.2
+)
+shopping_p
+
+```
+*As for online shopping companies, there is still no strong correlation between confidence index and revenue.  For example,  although the confidence index of 2020 3rd quarter decreased, the revenue of companies like Farfetch, Amazon and Etsy increased. At the same time, for companies like Overstock and Blue Appron, the revenue decreased. * 
+
+```{r}
+entertainment<-combo_data%>%
+  select(Date,Std_individual_CI, 11:14)
+entertainment_p<-parcoords::parcoords(entertainment,
+              rownames=FALSE,
+              height = 450,
+              width = 700,
+              color=list(
+                colorBy ="Date",
+                colorScale="scaleOrdinal",
+                colorScheme = "schemeCategory10"),
+              withD3 = TRUE,
+              brushMode = "1D-axes",
+              alphaOnBrushed = 0.2)
+entertainment_p
+```
+*For entertainment companies, no obvious correlation between confidence index and revenue is observed.*
+
+```{r}
+wfh<-combo_data%>%
+  select(Date,Std_individual_CI, 15:16)
+wfh_p<-parcoords::parcoords(wfh,
+              rownames=FALSE,
+              height = 450,
+              width = 600,
+              color=list(
+                colorBy ="Date",
+                colorScale="scaleOrdinal",
+                colorScheme = "schemeCategory10"),
+              withD3 = TRUE,
+              brushMode = "1D-axes",
+              alphaOnBrushed = 0.2
+)
+wfh_p
+
+```
+*For wfh companies, it appears no correlation between confidence index and revenue.  From 2019 2nd Q to 2019 4th Q, confidence index decreased but revenue of 8x8 Inc and MG incresed.  From 2019 4th Q to 2020 1st Q, confidence index increased, the revenue of companies increased as well.*
+```{r}
+other<-combo_data%>%
+  select(Date,Std_individual_CI, 17:21)
+other_p<-parcoords::parcoords(other,
+              rownames=FALSE,
+              height = 450,
+              width = 600,
+              color=list(
+                colorBy ="Date",
+                colorScale="scaleOrdinal",
+                colorScheme = "schemeCategory10"),
+              withD3 = TRUE,
+              brushMode = "1D-axes",
+              alphaOnBrushed = 0.2
+)
+other_p
+
+
+```
+*For companies in this category, still no correlation is observed. from 2020 2nd Q to 2020 3rd Q, confidence index increased but the revenue dropped dramatically across all companies on the plot.  From 2018 4th Q to 2019 1st Q confidence index increased but revenue of companies increased as well.* 
+
