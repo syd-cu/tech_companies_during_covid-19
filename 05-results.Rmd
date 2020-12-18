@@ -57,17 +57,20 @@ streaming_rev <- quarter_rev %>%
   ungroup()
 
 streaming_rev_facet <- rbind(
-  data.frame(Date = streaming_rev$Date, Company = streaming_rev$Company, num = streaming_rev$Rev_year_growth, what = "Year-on-year Growth"),
-  data.frame(Date = streaming_rev$Date, Company = streaming_rev$Company, num = streaming_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
+  data.frame(Date = streaming_rev$Date, Company = streaming_rev$Company, num = streaming_rev$Rev_year_growth, what = "Year-on-year Growth", id = 0),
+  data.frame(Date = streaming_rev$Date, Company = streaming_rev$Company, num = streaming_rev$Revenue_scaled, what = "Scaled Quarterly Revenue", id = 1)
 )
 
 secondFacet <- FALSE
+streaming_rev_facet$what <- factor(streaming_rev_facet$what, levels = c("Year-on-year Growth", "Scaled Quarterly Revenue"))
+
 streaming_rev_plot_facet <- ggplot(data = streaming_rev_facet) +
   facet_grid(what~., scale = "free") +
-  geom_line(data=streaming_rev_facet[streaming_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
-  geom_point(data=streaming_rev_facet[streaming_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
   geom_line(data=streaming_rev_facet[streaming_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 2) +
   geom_point(data=streaming_rev_facet[streaming_rev_facet$what=="Year-on-year Growth",], aes(Date, num, color = Company, group = Company), size = 4) +
+  geom_line(data=streaming_rev_facet[streaming_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
+  geom_point(data=streaming_rev_facet[streaming_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 4) +
+  
   scale_y_continuous(name = NULL, labels = function(b) {
     if(!secondFacet) {
       secondFacet <<- TRUE 
@@ -79,7 +82,7 @@ streaming_rev_plot_facet <- ggplot(data = streaming_rev_facet) +
 ) +
   labs(x = "Quarter",
        title = "2019 Q4 ~ 2020 Q3 Quarterly Revenue and Year-on-year Growth (Streaming)") +
-  scale_color_manual(values=c("purple", "red", "green", "blue"), 
+  scale_color_manual(values=c("red", "green", "blue", "purple"), 
                        name="",
                        breaks=c("disney", "netflix", "roku", "att"),
                        labels=c("Disney", "Netflix", "Roku", "AT&T"))
@@ -95,7 +98,7 @@ streaming_rev_plot_facet
 
 With restriction on traveling and social-distancing measures in place, online streaming service are witnessing a surge in users. From the stock price line plot, Netflix and Roku both staged a strong recovery from the breakdown in March and continued to grow strongly since then, while Disney and AT&T remained sluggish after March for a long time.
 
-Netflix dazzled investors with its robust growth in subscribers and revenue. The stable growth of its stock and revenue can be attributted to the Covid-19 pandemic, which boosted the usage of streaming media services as more people stayed home. Together with Netflix's massive base of subscribers shaped over a long period of time, the economies of scale also helped Netflix gain a clear advantage over other competitors.
+Netflix dazzled investors with its robust growth in subscribers and revenue. The stable growth of its stock and revenue can be attributed to the Covid-19 pandemic, which boosted the usage of streaming media services as more people stayed home. Together with Netflix's massive base of subscribers shaped over a long period of time, the economies of scale also helped Netflix gain a clear advantage over other competitors.
 
 Roku shows an more explosive growth in stock price in the past 6 months. While both occupy a significant portion of the streaming TV market, Roku and Netflix are two fundamentally different companies. Netflix operates as a subscription service while Roku’s business is based on streaming players and free content supported by ad-revenue. Besides the growing user base, Roku's higher ad revenue also helped boost the stock price and the overall revenue.
 
@@ -143,6 +146,8 @@ entertainment_rev_facet <- rbind(
   data.frame(Date = entertainment_rev$Date, Company = entertainment_rev$Company, num = entertainment_rev$Revenue_scaled, what = "Scaled Quarterly Revenue")
 )
 
+entertainment_rev_facet$what <- factor(entertainment_rev_facet$what, levels = c("Year-on-year Growth", "Scaled Quarterly Revenue"))
+
 secondFacet <- FALSE
 entertainment_rev_plot_facet <- ggplot(data = entertainment_rev_facet) +
   facet_grid(what~., scale = "free") +
@@ -161,7 +166,7 @@ entertainment_rev_plot_facet <- ggplot(data = entertainment_rev_facet) +
 ) +
   labs(x = "Quarter",
        title = "2019 Q4 ~ 2020 Q3 Quarterly Revenue and Year-on-year Growth (Gaming)") +
-  scale_color_manual(values=c("orange", "skyblue", "maroon", "olivedrab"), 
+  scale_color_manual(values=c("orange", "skyblue", "olivedrab", "maroon"), 
                        name="Company",
                        breaks=c("atvi", "ea", "sciplay", "ttwo"),
                        labels=c("Activision Blizzard", "Electronic Arts", "Sciplay", "Take-Two Interactive"))
@@ -224,6 +229,9 @@ shopping_rev_facet <- rbind(
 )
 
 secondFacet <- FALSE
+shopping_rev_facet$what <- factor(shopping_rev_facet$what, levels = c("Year-on-year Growth", "Scaled Quarterly Revenue"))
+
+
 shopping_rev_plot_facet <- ggplot(data = shopping_rev_facet) +
   facet_grid(what~., scale = "free") +
   geom_line(data=shopping_rev_facet[shopping_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
@@ -241,7 +249,7 @@ shopping_rev_plot_facet <- ggplot(data = shopping_rev_facet) +
 ) +
   labs(x = "Quarter",
        title = "2019 Q4~2020 Q3 Quarterly Revenue and Year-on-year Growth (Ecommerce)") +
-  scale_color_manual(values=c("tomato", "seagreen", "brown", "black", "gold", "violet"), 
+  scale_color_manual(values=c("tomato", "violet", "gold","brown",  "black", "seagreen"), 
                        name="Company",
                        breaks=c("amazon", "blue_apron", "etsy", "farfetch", "overstock", "wayfair"),
                        labels=c("Amazon", "Blue Apron", "Etsy", "Farfetch", "Overstock", "Wayfair"))
@@ -302,6 +310,9 @@ wfl_rev_facet <- rbind(
 )
 
 secondFacet <- FALSE
+wfl_rev_facet$what <- factor(wfl_rev_facet$what, levels = c("Year-on-year Growth", "Scaled Quarterly Revenue"))
+
+
 wfl_rev_plot_facet <- ggplot(data = wfl_rev_facet) +
   facet_grid(what~., scale = "free") +
   geom_line(data=wfl_rev_facet[wfl_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
@@ -377,6 +388,10 @@ other_rev_facet <- rbind(
 )
 
 secondFacet <- FALSE
+
+other_rev_facet$what <- factor(other_rev_facet$what, levels = c("Year-on-year Growth", "Scaled Quarterly Revenue"))
+
+
 other_rev_plot_facet <- ggplot(data = other_rev_facet) +
   facet_grid(what~., scale = "free") +
   geom_line(data=other_rev_facet[other_rev_facet$what=="Scaled Quarterly Revenue",], aes(Date, num, color = Company, group = Company), size = 2) +
